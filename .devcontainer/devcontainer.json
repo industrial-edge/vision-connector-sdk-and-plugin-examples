@@ -1,0 +1,26 @@
+{
+	"name": "vca-drivers",
+	"build": {
+		"dockerfile": "../Dockerfile",
+		"target": "dev_container"
+	},
+	"runArgs": [
+		"--cap-add=SYS_PTRACE",
+		"--privileged",
+		"--security-opt",
+		"seccomp=unconfined"
+	],
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"editor.formatOnSave": true,
+				"C_Cpp.autocomplete": "disabled"
+			},
+			"extensions": [
+				"llvm-vs-code-extensions.vscode-clangd",
+				"ms-vscode.cpptools-extension-pack"
+			]
+		}
+	},
+	"remoteUser": "root"
+}

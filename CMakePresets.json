@@ -1,0 +1,379 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "vca-drivers-base-config",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "1",
+        "SDK_LIBRARY_DIR": "${sourceDir}/sdk",
+        "SDK_INCLUDE_DIR": "${sourceDir}/sdk/include",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/installed_drivers"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "vca-drivers-tests-base-config",
+      "hidden": true,
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TESTING": "ON",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "numbers-debug",
+      "displayName": "Numbers Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "NUMBERS",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "numbers-release",
+      "displayName": "Numbers Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "NUMBERS",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "numbers-tests",
+      "displayName": "Numbers Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "NUMBERS"
+      }
+    },
+    {
+      "name": "globbing-debug",
+      "displayName": "Globbing Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "GLOBBING",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "globbing-release",
+      "displayName": "Globbing Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "GLOBBING",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "globbing-tests",
+      "displayName": "Globbing Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "GLOBBING"
+      }
+    },
+    {
+      "name": "daheng-debug",
+      "displayName": "Daheng Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "DAHENG",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "daheng-release",
+      "displayName": "Daheng Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "DAHENG",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "daheng-tests",
+      "displayName": "Daheng Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "DAHENG"
+      }
+    },
+    {
+      "name": "baslerll-debug",
+      "displayName": "Baslerll Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "BASLERLL",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "baslerll-release",
+      "displayName": "Baslerll Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "BASLERLL",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "baslerll-tests",
+      "displayName": "Baslerll Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "BASLERLL"
+      }
+    },
+    {
+      "name": "basler-debug",
+      "displayName": "Basler Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "BASLER",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "basler-release",
+      "displayName": "Basler Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "BASLER",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "basler-tests",
+      "displayName": "Basler Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "BASLER"
+      }
+    },
+    {
+      "name": "allied-debug",
+      "displayName": "Allied Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "ALLIED",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "allied-release",
+      "displayName": "Allied Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "ALLIED",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "allied-tests",
+      "displayName": "Allied Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "ALLIED"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "numbers-debug-build",
+      "displayName": "Numbers Debug Build",
+      "configurePreset": "numbers-debug",
+      "targets": [
+        "numbers"
+      ]
+    },
+    {
+      "name": "numbers-release-build",
+      "displayName": "Numbers Release Build",
+      "configurePreset": "numbers-release",
+      "targets": [
+        "numbers",
+        "install"
+      ]
+    },
+    {
+      "name": "numbers-tests-build",
+      "displayName": "Numbers Tests Build",
+      "configurePreset": "numbers-tests",
+      "targets": [
+        "numbers-Test"
+      ]
+    },
+    {
+      "name": "globbing-debug-build",
+      "displayName": "Globbing Debug Build",
+      "configurePreset": "globbing-debug",
+      "targets": [
+        "globbing"
+      ]
+    },
+    {
+      "name": "globbing-release-build",
+      "displayName": "Globbing Release Build",
+      "configurePreset": "globbing-release",
+      "targets": [
+        "globbing",
+        "install"
+      ]
+    },
+    {
+      "name": "globbing-tests-build",
+      "displayName": "Globbing Tests Build",
+      "configurePreset": "globbing-tests",
+      "targets": [
+        "globbing-Test"
+      ]
+    },
+    {
+      "name": "daheng-debug-build",
+      "displayName": "Daheng Debug Build",
+      "configurePreset": "daheng-debug",
+      "targets": [
+        "daheng"
+      ]
+    },
+    {
+      "name": "daheng-release-build",
+      "displayName": "Daheng Release Build",
+      "configurePreset": "daheng-release",
+      "targets": [
+        "daheng",
+        "install"
+      ]
+    },
+    {
+      "name": "daheng-tests-build",
+      "displayName": "Daheng Tests Build",
+      "configurePreset": "daheng-tests",
+      "targets": [
+        "daheng-Test"
+      ]
+    },
+    {
+      "name": "baslerll-debug-build",
+      "displayName": "Baslerll Debug Build",
+      "configurePreset": "baslerll-debug",
+      "targets": [
+        "baslerll"
+      ]
+    },
+    {
+      "name": "baslerll-release-build",
+      "displayName": "Baslerll Release Build",
+      "configurePreset": "baslerll-release",
+      "targets": [
+        "baslerll",
+        "install"
+      ]
+    },
+    {
+      "name": "baslerll-tests-build",
+      "displayName": "Baslerll Tests Build",
+      "configurePreset": "baslerll-tests",
+      "targets": [
+        "baslerll-Test"
+      ]
+    },
+    {
+      "name": "basler-debug-build",
+      "displayName": "Basler Debug Build",
+      "configurePreset": "basler-debug",
+      "targets": [
+        "basler"
+      ]
+    },
+    {
+      "name": "basler-release-build",
+      "displayName": "Basler Release Build",
+      "configurePreset": "basler-release",
+      "targets": [
+        "basler",
+        "install"
+      ]
+    },
+    {
+      "name": "basler-tests-build",
+      "displayName": "Basler Tests Build",
+      "configurePreset": "basler-tests",
+      "targets": [
+        "basler-Test"
+      ]
+    },
+    {
+      "name": "allied-debug-build",
+      "displayName": "Allied Debug Build",
+      "configurePreset": "allied-debug",
+      "targets": [
+        "allied"
+      ]
+    },
+    {
+      "name": "allied-release-build",
+      "displayName": "Allied Release Build",
+      "configurePreset": "allied-release",
+      "targets": [
+        "allied",
+        "install"
+      ]
+    },
+    {
+      "name": "allied-tests-build",
+      "displayName": "Allied Tests Build",
+      "configurePreset": "allied-tests",
+      "targets": [
+        "allied-Test"
+      ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "numbers-tests",
+      "displayName": "Numbers Tests",
+      "configurePreset": "numbers-tests"
+    },
+    {
+      "name": "globbing-tests",
+      "displayName": "Globbing Tests",
+      "configurePreset": "globbing-tests"
+    },
+    {
+      "name": "daheng-tests",
+      "displayName": "Daheng Tests",
+      "configurePreset": "daheng-tests"
+    },
+    {
+      "name": "baslerll-tests",
+      "displayName": "Baslerll Tests",
+      "configurePreset": "baslerll-tests"
+    },
+    {
+      "name": "basler-tests",
+      "displayName": "Basler Tests",
+      "configurePreset": "basler-tests"
+    },
+    {
+      "name": "allied-tests",
+      "displayName": "Allied Tests",
+      "configurePreset": "allied-tests"
+    }
+  ]
+}
