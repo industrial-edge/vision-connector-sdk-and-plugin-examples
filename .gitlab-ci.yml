@@ -11,7 +11,13 @@ variables:
 
   CLEARED_DEBIAN_IMAGE: debian:bullseye-20221219-slim
 
+  DRIVER_BUILD_IMAGE: ie-vision-connector-driver-build-image
+  DRIVER_BUILD_IMAGE_TAG: '0.0.2'
+  DRIVER_TEST_IMAGE: ie-vision-connector-driver-test-image
+  DRIVER_TEST_IMAGE_TAG: '0.0.2'
+
 stages:
+  - check_img
   - build_img
   - test_driver
   - build_driver
@@ -22,6 +28,30 @@ stages:
     - if: $CI_COMMIT_TAG == null
   publish_rule:
     - if: '$CI_COMMIT_TAG && $CI_COMMIT_TAG !~ /.*-test.*/'
+
+.check_image_existence:
+  image: $CI_REGISTRY/common-test-framework/ctf-core/ctf-test_environment/ctf-test-environment-ie:${CTF_TEST_ENVIRONMENT_VERSION}
+  script:
+    - echo $PROJECT_ACCESS_TOKEN | crane auth login cr.siemens.com -u VCATOKEN --password-stdin
+    - IMAGE_CHECK_FAILED=false
+    - crane manifest $CHECKED_IMAGE || IMAGE_CHECK_FAILED=true
+    - echo IMAGE_CHECK_FAILED=$IMAGE_CHECK_FAILED > ./image_check_result.txt
+    - cat ./image_check_result.txt
+  artifacts:
+    paths:
+      - ./image_check_result.txt
+
+check_build_image:
+  stage: check_img
+  variables:
+    CHECKED_IMAGE: $CI_REGISTRY_IMAGE/$DRIVER_BUILD_IMAGE:$DRIVER_BUILD_IMAGE_TAG
+  extends: .check_image_existence
+
+check_test_image:
+  stage: check_img
+  variables:
+    CHECKED_IMAGE: $CI_REGISTRY_IMAGE/$DRIVER_TEST_IMAGE:$DRIVER_TEST_IMAGE_TAG
+  extends: .check_image_existence
 
 .package_version_config_template:
   - if [ "$CI_COMMIT_TAG" != "" ] ; then
@@ -53,6 +83,14 @@ publish_drivers:
     entrypoint: [""]
   script:
     - echo "${KANIKO_CONFIG}" > /kaniko/.docker/config.json
+    - cat ./image_check_result.txt
+    - source ./image_check_result.txt
+    - echo $IMAGE_CHECK_FAILED
+    - env
+    - if ! $IMAGE_CHECK_FAILED; then
+        echo "Docker image $CI_REGISTRY_IMAGE/$COMPONENT_NAME:$TAG is already available. Stopping the job successfully";
+        exit 0;
+      fi
     - env
     - >-
       /kaniko/executor
@@ -65,9 +103,12 @@ publish_drivers:
 
 build_driver_build_image:
   stage: build_img
+  needs:
+    - job: check_build_image
+      artifacts: true
   variables:
-    COMPONENT_NAME: ie-vision-connector-driver-build-image
-    TAG: '0.0.1'
+    COMPONENT_NAME: $DRIVER_BUILD_IMAGE
+    TAG: $DRIVER_BUILD_IMAGE_TAG
     DOCKERFILE_PATH: $CI_PROJECT_DIR
     DOCKER_BASE_IMAGE: $CLEARED_DEBIAN_IMAGE
     KANIKO_OPTIONAL_ARG: --single-snapshot --target build
@@ -75,9 +116,12 @@ build_driver_build_image:
 
 build_driver_test_image:
   stage: build_img
+  needs:
+    - job: check_test_image
+      artifacts: true
   variables:
-    COMPONENT_NAME: ie-vision-connector-driver-test-image
-    TAG: '0.0.1'
+    COMPONENT_NAME: $DRIVER_TEST_IMAGE
+    TAG: $DRIVER_TEST_IMAGE_TAG
     DOCKERFILE_PATH: $CI_PROJECT_DIR
     DOCKER_BASE_IMAGE: $CLEARED_DEBIAN_IMAGE
     KANIKO_OPTIONAL_ARG: --single-snapshot --target test
@@ -87,7 +131,7 @@ build_driver_test_image:
   stage: test_driver
   dependencies:
     - build_driver_test_image
-  image: $CI_REGISTRY_IMAGE/ie-vision-connector-driver-test-image:0.0.1
+  image: $CI_REGISTRY_IMAGE/$DRIVER_TEST_IMAGE:$DRIVER_TEST_IMAGE_TAG
   variables:
     DRIVER_NAME: ""
   script:
@@ -98,7 +142,7 @@ build_driver_test_image:
 
 .driver_build_base:
   stage: build_driver
-  image: $CI_REGISTRY_IMAGE/ie-vision-connector-driver-build-image:0.0.1
+  image: $CI_REGISTRY_IMAGE/DRIVER_BUILD_IMAGE:DRIVER_BUILD_IMAGE_TAG
   variables:
     DRIVER_NAME: ""
   script:
