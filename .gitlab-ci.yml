@@ -142,7 +142,7 @@ build_driver_test_image:
 
 .driver_build_base:
   stage: build_driver
-  image: $CI_REGISTRY_IMAGE/DRIVER_BUILD_IMAGE:DRIVER_BUILD_IMAGE_TAG
+  image: $CI_REGISTRY_IMAGE/$DRIVER_BUILD_IMAGE:$DRIVER_BUILD_IMAGE_TAG
   variables:
     DRIVER_NAME: ""
   script:
