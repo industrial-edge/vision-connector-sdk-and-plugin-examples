@@ -29,6 +29,7 @@ find . -type f -exec sed -i 's/Template/'$1'/g' {} \;
 
 
 # Preparing CMake for new driver
+cd ../../..
 
 jq --arg DRIVER $1 --arg DRIVER_LOWER ${1,,} --arg DRIVER_UPPER ${1^^} '
     .configurePresets += [
