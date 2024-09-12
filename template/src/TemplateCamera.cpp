@@ -4,7 +4,7 @@
 
 namespace VCA::Template
 {
-    TemplateCamera::TemplateCamera(const std::string& cameraType) : Camera(cameraType)
+    TemplateCamera::TemplateCamera(const std::string& cameraType) : VCA::SDK::v1::Camera(cameraType)
     {
         
     }
