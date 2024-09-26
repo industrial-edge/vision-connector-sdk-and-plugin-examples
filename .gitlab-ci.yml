@@ -111,7 +111,7 @@ build_driver_build_image:
     TAG: $DRIVER_BUILD_IMAGE_TAG
     DOCKERFILE_PATH: $CI_PROJECT_DIR
     DOCKER_BASE_IMAGE: $CLEARED_DEBIAN_IMAGE
-    KANIKO_OPTIONAL_ARG: --single-snapshot --target build
+    KANIKO_OPTIONAL_ARG: --single-snapshot --target build_img
   extends: .kaniko_build
 
 build_driver_test_image:
@@ -124,7 +124,7 @@ build_driver_test_image:
     TAG: $DRIVER_TEST_IMAGE_TAG
     DOCKERFILE_PATH: $CI_PROJECT_DIR
     DOCKER_BASE_IMAGE: $CLEARED_DEBIAN_IMAGE
-    KANIKO_OPTIONAL_ARG: --single-snapshot --target test
+    KANIKO_OPTIONAL_ARG: --single-snapshot --target test_img
   extends: .kaniko_build
 
 .driver_test_base:
