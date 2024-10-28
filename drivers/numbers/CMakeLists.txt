@@ -36,7 +36,7 @@ endforeach()
 
 add_library(${LIBRARY_NAME} SHARED ${PROJECT_SOURCES})
 
-target_link_libraries(${LIBRARY_NAME} PRIVATE ${OpenCV_LIBS} ${LIBS})
+target_link_libraries(${LIBRARY_NAME} PRIVATE opencv_core opencv_videoio ${LIBS})
 target_compile_options(${LIBRARY_NAME} PRIVATE -fno-gnu-unique)
 
 install(TARGETS ${LIBRARY_NAME} DESTINATION ${LIBRARY_NAME})

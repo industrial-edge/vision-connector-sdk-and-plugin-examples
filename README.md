@@ -8,15 +8,15 @@ This project contains the source code for VCA custom drivers with utility script
 ### Requirements
 In the requirements folder there are install scripts to ease the environment setup.
 
-- install_cmake_3_21_7.sh: The project uses cmake presets therefore the default cmake version needs to be upgraded. This script is the first which should be run during environment setup
-- install_build_requirements.sh: This script installs the packages purely required for building the drivers
+- install_build_requirements.sh: This script installs a specific CMake version and the packages purely required for building the drivers
+- install_opencv.sh: This script installs a specific version of OpenCV (4.9.0) with FFmpeg (7.1) which are also used by VCA
 - install_test_requirements.sh: This script sets up the environment to run driver tests
 - install_clangd_language_server_16_0_2.sh: (For Dev Container) If Dev Container development environment is used it is recommended to use the clangd language server. This script installs the language server
 
 
 ### Development environment
 
-The drivers target build platform is Linux therefore it is recommended to use the same platform for development. To ease environment setup Dev Container is supported from VS Code but because of the install scripts developing directly on Linux or in virtual machine the setup just as easy
+The drivers target build platform is Linux therefore it is recommended to use the same platform for development. To ease environment setup Dev Container is supported from VS Code but because of the install scripts developing directly on Linux or in virtual machine the setup just as easy. **If Linux machine or non-Docker virtualization is used the PATH, LIBRARY_PATH and LD_LIBRARY_PATH environment variables might need to be updated according to the Dockerfile COMMON_PATH and COMMON_LIB_PATH args**
 
 Using the build_drivers_with_docker.bat and build_drivers_with_docker.sh scripts it is also possible to build and install the drivers through Docker without setting up the environment
 
