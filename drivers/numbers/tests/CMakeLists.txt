@@ -22,7 +22,7 @@ foreach(LIB ${LIBLIST})
 endforeach()
 
 add_executable(${TEST_EXECUTABLE_NAME} ${TEST_SOURCES})
-target_link_libraries(${TEST_EXECUTABLE_NAME} VCA-SDK ${GTEST_LIBRARIES} ${OpenCV_LIBS} Threads::Threads ${LIBS})
+target_link_libraries(${TEST_EXECUTABLE_NAME} VCA-SDK ${GTEST_LIBRARIES} opencv_core opencv_videoio Threads::Threads ${LIBS})
 target_compile_definitions(${TEST_EXECUTABLE_NAME} PRIVATE TESTING)
 
 if(EXISTS ${PROJECT_SOURCE_DIR}/lib)

@@ -12,9 +12,9 @@ variables:
   CLEARED_DEBIAN_IMAGE: debian:bullseye-20221219-slim
 
   DRIVER_BUILD_IMAGE: ie-vision-connector-driver-build-image
-  DRIVER_BUILD_IMAGE_TAG: '0.0.2'
+  DRIVER_BUILD_IMAGE_TAG: '0.0.5'
   DRIVER_TEST_IMAGE: ie-vision-connector-driver-test-image
-  DRIVER_TEST_IMAGE_TAG: '0.0.2'
+  DRIVER_TEST_IMAGE_TAG: '0.0.5'
 
 stages:
   - check_img
@@ -135,7 +135,6 @@ build_driver_test_image:
   variables:
     DRIVER_NAME: ""
   script:
-    - source /root/.bashrc
     - cmake --preset ${DRIVER_NAME,,}-tests
     - cmake --build --preset ${DRIVER_NAME,,}-tests-build
     - ctest --preset ${DRIVER_NAME,,}-tests --rerun-failed --output-on-failure
@@ -147,7 +146,6 @@ build_driver_test_image:
     DRIVER_NAME: ""
   script:
     - !reference [.package_version_config_template]
-    - source /root/.bashrc
     - cmake --preset ${DRIVER_NAME,,}-release
     - cmake --build --preset ${DRIVER_NAME,,}-release-build --target install
     - cd installed_drivers/${DRIVER_NAME,,}

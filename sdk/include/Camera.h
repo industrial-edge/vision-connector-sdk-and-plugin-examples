@@ -31,7 +31,7 @@ namespace VCA::SDK::v1
         void disconnect();
 
         bool isConnected() const;
-        virtual std::string cameraUniqueId() const;
+        const std::string& cameraUniqueId() const;
 
         // Thread safe methods
         std::shared_ptr<SDK::v1::Image> safeAcquireImage();
@@ -50,7 +50,7 @@ namespace VCA::SDK::v1
         unsigned int imageSequenceCounter() const;
         unsigned int increaseImageSequenceCounter();
 
-        static constexpr int s_imageAcquisitionTimeout = 3000;
+        static constexpr int s_imageAcquisitionTimeout = 100000;
         static constexpr std::chrono::seconds s_reconnectTimeout = std::chrono::seconds(30);
         std::mutex m_cameraAccessMutex;
         std::chrono::time_point<std::chrono::system_clock> m_lastReconnectTime;
