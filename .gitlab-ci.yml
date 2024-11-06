@@ -62,7 +62,7 @@ check_test_image:
 
 publish_drivers:
   stage: publish_drivers
-  image: $CI_REGISTRY/siemens-ai-launcher-sail/ai-itest/ai-itest_environment/ai-itest_environment-ie:${SAIL_TEST_ENVIRONMENT_VERSION}
+  image: $CI_REGISTRY/siemens-ai-launcher-sail/ai-itest/ai-itest_environment/ai-itest_environment-ie:3.8.0
   script:
     - cd installed_drivers
     - find . -name "*.zip" -exec sh -c '/sail-ci-scripts/upload-file-to-artifactory.sh -f {} -r $PACKAGE_ARCHIVE_LOCATION' \;
