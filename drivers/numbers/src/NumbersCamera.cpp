@@ -45,11 +45,11 @@ namespace VCA::EXAMPLES
         cv::putText(rawImage, number, cv::Point(x, y), fontFace, m_fontScale, cv::Scalar(255, 255, 255), m_thickness);
 
         const auto totalElementCount = rawImage.total() * rawImage.elemSize();
-        const auto frameData = new uint8_t[totalElementCount];
-        std::memcpy(frameData, reinterpret_cast<uint8_t*>(rawImage.data), totalElementCount);
+        auto frameData = std::make_unique<uint8_t[]>(totalElementCount);
+        std::memcpy(frameData.get(), reinterpret_cast<uint8_t*>(rawImage.data), totalElementCount);
 
         auto image = std::make_shared<SDK::v1::Image>();
-        auto imageData = std::make_unique<SDK::v1::ImageData>(frameData, totalElementCount);
+        auto imageData = std::make_unique<SDK::v1::ImageData>(frameData.get(), totalElementCount);
         const VCA::SDK::v1::ImageDetail imageDetail(
             VCA::SDK::v1::CameraInformation(cameraUniqueId(), "1"),
             VCA::SDK::v1::ImageInformation(imageSequenceCounter(), rawImage.cols, rawImage.rows, "BGR8"),
