@@ -1,5 +1,7 @@
 #include "DahengCamera.h"
 
+#include "DahengPluginLogger.h"
+
 using namespace VCA::SDK::v1;
 using namespace std;
 
@@ -12,10 +14,7 @@ using namespace std;
 
 namespace VCA::Daheng
 {
-    DahengCamera::DahengCamera(const std::string& cameraId) : Camera(cameraId)
-    {
-        m_version = "0.0.2";
-    }
+    DahengCamera::DahengCamera(const std::string& cameraId) : Camera(cameraId) {}
 
     std::string DahengCamera::GetErrorString(GX_STATUS emErrorStatus)
     {
@@ -133,7 +132,7 @@ namespace VCA::Daheng
     std::shared_ptr<VCA::SDK::v1::Image> DahengCamera::acquireImage()
     {
         auto image = std::make_shared<SDK::v1::Image>();
-        if (m_hDevice && m_isConnected)
+        if (m_hDevice && isConnected())
         {
             auto emStatus = GXGetImage(m_hDevice, &framebuffer, 2000);
             if (emStatus != GX_STATUS_SUCCESS)
@@ -165,7 +164,7 @@ namespace VCA::Daheng
         GX_OPEN_PARAM open_param;
         open_param.accessMode = GX_ACCESS_EXCLUSIVE;
         open_param.openMode = GX_OPEN_SN;
-        open_param.pszContent = (char*)m_uniqueId.c_str();
+        open_param.pszContent = const_cast<char*>(cameraUniqueId().c_str());
         auto status = GXOpenDevice(&open_param, &m_hDevice);
         GX_ErrorTrap(status);
     }
@@ -381,12 +380,20 @@ namespace VCA::Daheng
         GX_INT_RANGE widthRange, heightRange;
         GXGetIntRange(m_hDevice, GX_INT_WIDTH, &widthRange);
         GXGetIntRange(m_hDevice, GX_INT_HEIGHT, &heightRange);
-        cameraParameters.push_back(CameraParameter::CreateParameter(
-            ParameterType::Int, cameraConfig.Width, to_string(width), "Sensor width", to_string(widthRange.nMin),
-            to_string(widthRange.nMax), false, to_string(widthRange.nInc)));
-        cameraParameters.push_back(CameraParameter::CreateParameter(
-            ParameterType::Int, cameraConfig.Height, to_string(height), "Sensor height", to_string(heightRange.nMin),
-            to_string(heightRange.nMax), false, to_string(heightRange.nInc)));
+
+        auto sensorWidth = CameraParameter::CreateParameter(ParameterType::Int, cameraConfig.Width, to_string(width),
+                                                            "Sensor width", false);
+        sensorWidth.setMin(to_string(widthRange.nMin));
+        sensorWidth.setMax(to_string(widthRange.nMax));
+        sensorWidth.setIncrement(to_string(widthRange.nInc));
+        cameraParameters.push_back(sensorWidth);
+
+        auto sensorHeight = CameraParameter::CreateParameter(ParameterType::Int, cameraConfig.Height, to_string(height),
+                                                             "Sensor height", false);
+        sensorHeight.setMin(to_string(heightRange.nMin));
+        sensorHeight.setMax(to_string(heightRange.nMax));
+        sensorHeight.setIncrement(to_string(heightRange.nInc));
+        cameraParameters.push_back(sensorHeight);
 
         if (!isConnected())
         {

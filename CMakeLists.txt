@@ -34,3 +34,7 @@ endif()
 if(TARGET_DRIVER STREQUAL ALLIED)
 	add_subdirectory(drivers/allied)
 endif()
+
+if(TARGET_DRIVER STREQUAL NUMBERSWITHFILELOGGER)
+	add_subdirectory(drivers/numberswithfilelogger)
+endif()

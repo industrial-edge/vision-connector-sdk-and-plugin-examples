@@ -1,9 +1,15 @@
 #include "NumbersCameraConnector.h"
 
 #include "NumbersCamera.h"
+#include "NumbersPluginLogger.h"
 
-namespace VCA::EXAMPLES
+namespace VCA::Numbers
 {
+    NumbersCameraConnector::NumbersCameraConnector()
+    {
+        LOG_NUMBERS_PLUGIN_INFO("Camera connector initialized");
+    }
+
     std::vector<std::string> NumbersCameraConnector::discover() const
     {
         return {"red", "green", "blue", "black"};
@@ -11,6 +17,6 @@ namespace VCA::EXAMPLES
 
     std::shared_ptr<VCA::SDK::v1::Camera> NumbersCameraConnector::createCamera(const std::string& cameraId) const
     {
-        return std::make_shared<VCA::EXAMPLES::NumbersCamera>(cameraId);
+        return std::make_shared<VCA::Numbers::NumbersCamera>(cameraId);
     }
-} // namespace VCA::EXAMPLES
+} // namespace VCA::Numbers

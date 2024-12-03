@@ -28,7 +28,7 @@ protected:
 
 TEST_F(TestGlobbingCamera, testCameraStatus)
 {
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera("");
+    auto globbingCamera = VCA::Globbing::GlobbingCamera("");
     EXPECT_EQ(globbingCamera.getStatus().status(), VCA::SDK::v1::CameraStatus::Status::OFFLINE);
     globbingCamera.connect();
     EXPECT_EQ(globbingCamera.getStatus().status(), VCA::SDK::v1::CameraStatus::Status::ONLINE);
@@ -38,7 +38,7 @@ TEST_F(TestGlobbingCamera, testCameraStatus)
 
 TEST_F(TestGlobbingCamera, testAcquireImageWithoutImageSourceFolder)
 {
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera(std::string(GLOBBING_DATA_FOLDER) + "birds");
+    auto globbingCamera = VCA::Globbing::GlobbingCamera(std::string(GLOBBING_DATA_FOLDER) + "birds");
     globbingCamera.connect();
 
     try
@@ -62,7 +62,7 @@ TEST_F(TestGlobbingCamera, testAcquireImageWithRemovedImage)
     fs::create_directories(birdsImageFolder);
     fs::copy("./resources/birds", birdsImageFolder);
 
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera(birdsImageFolder);
+    auto globbingCamera = VCA::Globbing::GlobbingCamera(birdsImageFolder);
     globbingCamera.connect();
 
     fs::remove_all(birdsImageFolder);
@@ -88,7 +88,7 @@ TEST_F(TestGlobbingCamera, testAcquireImage)
     fs::create_directories(birdsImageFolder);
     fs::copy("./resources/birds", birdsImageFolder);
 
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera(birdsImageFolder);
+    auto globbingCamera = VCA::Globbing::GlobbingCamera(birdsImageFolder);
     globbingCamera.connect();
 
     for (int i = 0; i < 5; ++i)
@@ -108,7 +108,7 @@ TEST_F(TestGlobbingCamera, testAcquireImageWithCustomImageFolder)
     fs::create_directories(birdsImageFolder);
     fs::copy("./resources/birds", birdsImageFolder);
 
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera(birdsImageFolder);
+    auto globbingCamera = VCA::Globbing::GlobbingCamera(birdsImageFolder);
     globbingCamera.connect();
 
     for (int i = 0; i < 5; ++i)
@@ -128,7 +128,7 @@ TEST_F(TestGlobbingCamera, testAcquireImageWithChangingImageFolder)
     fs::create_directories(birdsImageFolder);
     fs::copy("./resources/birds", birdsImageFolder);
 
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera(birdsImageFolder);
+    auto globbingCamera = VCA::Globbing::GlobbingCamera(birdsImageFolder);
     globbingCamera.connect();
 
     EXPECT_EQ(globbingCamera.imagePaths().size(), 5);
@@ -157,7 +157,7 @@ TEST_F(TestGlobbingCamera, testAcquireImageWithIncreasedFPS)
     fs::create_directories(birdsImageFolder);
     fs::copy("./resources/birds", birdsImageFolder);
 
-    auto globbingCamera = VCA::EXAMPLES::GlobbingCamera(birdsImageFolder);
+    auto globbingCamera = VCA::Globbing::GlobbingCamera(birdsImageFolder);
     globbingCamera.connect();
 
     const auto getConfigResult1 = globbingCamera.getConfig();

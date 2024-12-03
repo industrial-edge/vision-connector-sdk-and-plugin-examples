@@ -3,7 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 
-namespace VCA::EXAMPLES
+namespace VCA::Numbers
 {
     class NumbersCamera : public VCA::SDK::v1::Camera
     {
@@ -32,4 +32,4 @@ namespace VCA::EXAMPLES
         int m_baseline = 0;
         int m_fps = 1;
     };
-} // namespace VCA::EXAMPLES
+} // namespace VCA::Numbers

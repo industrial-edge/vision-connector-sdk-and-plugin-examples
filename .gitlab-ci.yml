@@ -189,3 +189,15 @@ build_daheng_driver:
   #   - test_daheng_driver
   variables:
     DRIVER_NAME: daheng
+
+test_numberswithfilelogger_driver:
+  extends: .driver_test_base
+  variables:
+    DRIVER_NAME: numberswithfilelogger
+
+build_numberswithfilelogger_driver:
+  extends: .driver_build_base
+  needs:
+    - test_numberswithfilelogger_driver
+  variables:
+    DRIVER_NAME: numberswithfilelogger

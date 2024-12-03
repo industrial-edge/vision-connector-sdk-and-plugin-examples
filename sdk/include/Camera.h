@@ -17,7 +17,6 @@
 #include <chrono>
 #include <mutex>
 
-
 namespace VCA::SDK::v1
 {
     class Camera
@@ -39,7 +38,8 @@ namespace VCA::SDK::v1
         SDK::v1::CameraParameterStatuses safeSetConfig(const SDK::v1::CameraParameters& parametersToChange);
 
         virtual SDK::v1::CameraStatus getStatus() const = 0;
-        virtual std::string getVersion();
+        const std::string& getVersion() const;
+        void setVersion(const std::string& version);
 
     protected:
         virtual std::shared_ptr<SDK::v1::Image> acquireImage() = 0;
@@ -54,11 +54,11 @@ namespace VCA::SDK::v1
         static constexpr std::chrono::seconds s_reconnectTimeout = std::chrono::seconds(30);
         std::mutex m_cameraAccessMutex;
         std::chrono::time_point<std::chrono::system_clock> m_lastReconnectTime;
-        std::string m_uniqueId;
-        bool m_isConnected = false;
-        std::string m_version = "Not Defined";
 
     private:
+        std::string m_version = "Not Defined";
+        std::string m_uniqueId;
+        bool m_isConnected = false;
         unsigned int m_imageSequenceCounter = 0;
     };
 } // namespace VCA::SDK::v1

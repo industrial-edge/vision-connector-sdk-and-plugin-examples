@@ -1,7 +1,7 @@
 #pragma once
-#include "Camera.h"
 #include "GxIAPI.h"
 
+#include <Camera.h>
 #include <iostream>
 #include <thread>
 

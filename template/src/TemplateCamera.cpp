@@ -1,18 +1,17 @@
-#include "CameraException.h"
-
 #include "TemplateCamera.h"
+
+#include "TemplatePluginLogger.h"
+
+#include <CameraException.h>
 
 namespace VCA::Template
 {
-    TemplateCamera::TemplateCamera(const std::string& cameraType) : VCA::SDK::v1::Camera(cameraType)
-    {
-        
-    }
+    TemplateCamera::TemplateCamera(const std::string& uniqueId) : VCA::SDK::v1::Camera(uniqueId) {}
 
     std::shared_ptr<VCA::SDK::v1::Image> TemplateCamera::acquireImage()
     {
         auto image = std::make_shared<SDK::v1::Image>();
-        //Return image
+        // Return image
         return image;
     }
 
@@ -23,14 +22,14 @@ namespace VCA::Template
     SDK::v1::CameraParameters TemplateCamera::getConfig()
     {
         SDK::v1::CameraParameters cameraParameters;
-        //Push paramaters
+        // Push paramaters
         return cameraParameters;
     }
 
     SDK::v1::CameraParameterStatuses TemplateCamera::setConfig(const SDK::v1::CameraParameters& parametersToChange)
     {
         SDK::v1::CameraParameterStatuses parameterStatuses;
-        //Set parameters
+        // Set parameters
         return parameterStatuses;
     }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "CameraConnector.h"
+#include <CameraConnector.h>
 
 namespace VCA::Template
 {
@@ -13,10 +13,3 @@ namespace VCA::Template
         std::shared_ptr<VCA::SDK::v1::Camera> createCamera(const std::string& cameraId) const override;
     };
 } // namespace VCA::Template
-
-#ifndef TESTING
-extern "C" VCA::SDK::v1::CameraConnector* createCameraConnector()
-{
-    return new VCA::Template::TemplateConnector();
-}
-#endif

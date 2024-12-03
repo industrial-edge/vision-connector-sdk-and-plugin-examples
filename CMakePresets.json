@@ -190,6 +190,32 @@
       "cacheVariables": {
         "TARGET_DRIVER": "ALLIED"
       }
+    },
+    {
+      "name": "numberswithfilelogger-debug",
+      "displayName": "NumbersWithFileLogger Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "NUMBERSWITHFILELOGGER",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "numberswithfilelogger-release",
+      "displayName": "NumbersWithFileLogger Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "NUMBERSWITHFILELOGGER",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "numberswithfilelogger-tests",
+      "displayName": "NumbersWithFileLogger Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "NUMBERSWITHFILELOGGER"
+      }
     }
   ],
   "buildPresets": [
@@ -342,6 +368,31 @@
       "targets": [
         "allied-Test"
       ]
+    },
+    {
+      "name": "numberswithfilelogger-debug-build",
+      "displayName": "NumbersWithFileLogger Debug Build",
+      "configurePreset": "numberswithfilelogger-debug",
+      "targets": [
+        "numberswithfilelogger"
+      ]
+    },
+    {
+      "name": "numberswithfilelogger-release-build",
+      "displayName": "NumbersWithFileLogger Release Build",
+      "configurePreset": "numberswithfilelogger-release",
+      "targets": [
+        "numberswithfilelogger",
+        "install"
+      ]
+    },
+    {
+      "name": "numberswithfilelogger-tests-build",
+      "displayName": "NumbersWithFileLogger Tests Build",
+      "configurePreset": "numberswithfilelogger-tests",
+      "targets": [
+        "numberswithfilelogger-Test"
+      ]
     }
   ],
   "testPresets": [
@@ -374,6 +425,11 @@
       "name": "allied-tests",
       "displayName": "Allied Tests",
       "configurePreset": "allied-tests"
+    },
+    {
+      "name": "numberswithfilelogger-tests",
+      "displayName": "NumbersWithFileLogger Tests",
+      "configurePreset": "numberswithfilelogger-tests"
     }
   ]
 }
