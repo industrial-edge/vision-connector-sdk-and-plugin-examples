@@ -4,7 +4,7 @@
 
 TEST(TestNumbersCameraConnector, testDiscover)
 {
-    VCA::EXAMPLES::NumbersCameraConnector numbersCameraConnector;
+    VCA::Numbers::NumbersCameraConnector numbersCameraConnector;
     const auto discoveredCameras = numbersCameraConnector.discover();
 
     EXPECT_EQ(discoveredCameras.size(), 4);
@@ -16,7 +16,7 @@ TEST(TestNumbersCameraConnector, testDiscover)
 
 TEST(TestNumbersCameraConnector, testCreateCameras)
 {
-    VCA::EXAMPLES::NumbersCameraConnector numbersCameraConnector;
+    VCA::Numbers::NumbersCameraConnector numbersCameraConnector;
 
     const auto redCamera = numbersCameraConnector.createCamera("red");
     const auto greenCamera = numbersCameraConnector.createCamera("green");

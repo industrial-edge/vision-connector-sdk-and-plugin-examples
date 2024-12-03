@@ -23,9 +23,8 @@ namespace VCA::SDK::v1
         explicit CameraParameter(const ObjectPtr& object);
         ~CameraParameter() = default;
 
-        static CameraParameter CreateParameter(std::string type, std::string name, std::string value,
-                                               std::string description, std::string min = "", std::string max = "",
-                                               bool readonly = false, std::string increment = "");
+        static CameraParameter CreateParameter(const std::string& type, const std::string& name,
+                                               const std::string& value, const std::string& description, bool readonly);
 
         void setName(const std::string& value);
         const std::string& name() const;

@@ -1,5 +1,5 @@
 #pragma once
-#include "Camera.h"
+#include <Camera.h>
 
 namespace VCA::Template
 {
@@ -7,7 +7,7 @@ namespace VCA::Template
     {
     public:
         explicit TemplateCamera() = delete;
-        explicit TemplateCamera(const std::string& cameraType);
+        explicit TemplateCamera(const std::string& uniqueId);
         ~TemplateCamera() override = default;
 
         std::shared_ptr<VCA::SDK::v1::Image> acquireImage() override;
@@ -21,6 +21,6 @@ namespace VCA::Template
         void stopImageAcquisition() override;
 
     private:
-        //private Variables
+        // private Variables
     };
 } // namespace VCA::Template

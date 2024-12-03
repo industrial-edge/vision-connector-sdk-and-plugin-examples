@@ -24,6 +24,7 @@ sed -i 's/template/'${1,,}'/' build.sh
 cd src
 for f in Template*; do mv "$f" $(echo "$f" | sed 's/^Template/'$1'/g'); done
 find . -type f -exec sed -i 's/Template/'$1'/g' {} \;
+find . -type f -exec sed -i 's/TEMPLATE/'${1^^}'/g' {} \;
 cd ../tests
 find . -type f -exec sed -i 's/Template/'$1'/g' {} \;
 

@@ -1,24 +1,30 @@
 #include "GlobbingCameraConnector.h"
 
 #include "GlobbingCamera.h"
+#include "GlobbingPluginLogger.h"
 
 #include <filesystem>
-#include <iostream>
 
 namespace fs = std::filesystem;
 
-namespace VCA::EXAMPLES
+namespace VCA::Globbing
 {
-    std::string getEnvVar( std::string key, std::string defaultValue )
+    GlobbingCameraConnector::GlobbingCameraConnector()
     {
-        const char * val = std::getenv( key.c_str() );
+        LOG_GLOBBING_PLUGIN_INFO("Camera connector initialized");
+    }
+
+    std::string getEnvVar(std::string key, std::string defaultValue)
+    {
+        const char* val = std::getenv(key.c_str());
         return val == NULL ? defaultValue : std::string(val);
     }
 
     std::vector<std::string> GlobbingCameraConnector::discover() const
     {
-        std::string globbingDataFolder =  getEnvVar("GLOBBING_DIR", "/globbing_data/");
-        std::cout << "Globbing directory " << globbingDataFolder << std::endl;
+        std::string globbingDataFolder = getEnvVar("GLOBBING_DIR", "/globbing_data/");
+        LOG_GLOBBING_PLUGIN_INFO("Using globbing directory: " + globbingDataFolder);
+
         std::vector<std::string> discoveredGlobbingDataFolders;
 
         if (fs::exists(globbingDataFolder))
@@ -36,7 +42,7 @@ namespace VCA::EXAMPLES
         }
         else
         {
-            std::cout << "Globbing camera connector error: " << globbingDataFolder << "does not exist" << std::endl;
+            LOG_GLOBBING_PLUGIN_INFO("Camera connector error: " + globbingDataFolder + " does not exist");
         }
 
         return discoveredGlobbingDataFolders;
@@ -46,4 +52,4 @@ namespace VCA::EXAMPLES
     {
         return std::make_shared<GlobbingCamera>(cameraId);
     }
-} // namespace VCA::EXAMPLES
+} // namespace VCA::Globbing

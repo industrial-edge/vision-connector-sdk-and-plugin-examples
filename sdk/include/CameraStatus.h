@@ -25,6 +25,8 @@ namespace VCA::SDK::v1
         explicit CameraStatus(Status status = Status::OFFLINE);
         ~CameraStatus() = default;
 
+        bool operator==(const Status& s) const;
+
         void setStatus(Status status);
         Status status() const;
     };

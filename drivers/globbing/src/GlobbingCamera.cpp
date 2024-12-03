@@ -1,12 +1,13 @@
 #include "GlobbingCamera.h"
 
-#include "CameraException.h"
+#include "GlobbingPluginLogger.h"
 
+#include <CameraException.h>
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <thread>
 
-namespace VCA::EXAMPLES
+namespace VCA::Globbing
 {
     GlobbingCamera::GlobbingCamera(const std::string& url) : Camera(url) {}
 
@@ -28,11 +29,10 @@ namespace VCA::EXAMPLES
         }
 
         const auto totalElementCount = rawImage.total() * rawImage.elemSize();
-        auto frameData = std::make_unique<uint8_t[]>(totalElementCount);
-        std::memcpy(frameData.get(), reinterpret_cast<uint8_t*>(rawImage.data), totalElementCount);
 
         auto image = std::make_shared<SDK::v1::Image>();
-        auto imageData = std::make_unique<SDK::v1::ImageData>(frameData.get(), totalElementCount);
+        auto imageData =
+            std::make_unique<SDK::v1::ImageData>(reinterpret_cast<uint8_t*>(rawImage.data), totalElementCount);
         const VCA::SDK::v1::ImageDetail imageDetail(
             VCA::SDK::v1::CameraInformation(cameraUniqueId(), "1"),
             VCA::SDK::v1::ImageInformation(imageSequenceCounter(), rawImage.cols, rawImage.rows, "BGR8"),
@@ -57,9 +57,14 @@ namespace VCA::EXAMPLES
     {
         collectImages();
         m_index = 0;
+
+        LOG_GLOBBING_PLUGIN_INFO("Image acquisition started for camera with unique id '" + cameraUniqueId() + "'");
     }
 
-    void GlobbingCamera::stopImageAcquisition() {}
+    void GlobbingCamera::stopImageAcquisition()
+    {
+        LOG_GLOBBING_PLUGIN_INFO("Image acquisition stopped for camera with unique id '" + cameraUniqueId() + "'");
+    }
 
     SDK::v1::CameraParameters GlobbingCamera::getConfig()
     {
@@ -121,7 +126,7 @@ namespace VCA::EXAMPLES
         }
         catch (const std::exception& ex)
         {
-            std::cout << "Globbing camera error: Failed to collect images: " << ex.what() << std::endl;
+            LOG_GLOBBING_PLUGIN_ERROR("Globbing camera error: Failed to collect images: " + std::string(ex.what()));
         }
     }
-} // namespace VCA::EXAMPLES
+} // namespace VCA::Globbing

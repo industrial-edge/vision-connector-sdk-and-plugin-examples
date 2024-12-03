@@ -1,12 +1,13 @@
 #include "NumbersCamera.h"
 
-#include "CameraException.h"
+#include "NumbersPluginLogger.h"
 
+#include <CameraException.h>
 #include <chrono>
 #include <string>
 #include <thread>
 
-namespace VCA::EXAMPLES
+namespace VCA::Numbers
 {
     NumbersCamera::NumbersCamera(const std::string& cameraType) : Camera(cameraType)
     {
@@ -26,6 +27,8 @@ namespace VCA::EXAMPLES
         {
             m_backgroundColor = cv::Scalar(0, 0, 0);
         }
+
+        LOG_NUMBERS_PLUGIN_INFO("Camera created with unique id '" + cameraType + "'");
     }
 
     std::shared_ptr<VCA::SDK::v1::Image> NumbersCamera::acquireImage()
@@ -41,15 +44,12 @@ namespace VCA::EXAMPLES
 
         int x = (rawImage.cols - textSize.width) / 2;
         int y = (rawImage.rows + textSize.height) / 2;
-
         cv::putText(rawImage, number, cv::Point(x, y), fontFace, m_fontScale, cv::Scalar(255, 255, 255), m_thickness);
 
         const auto totalElementCount = rawImage.total() * rawImage.elemSize();
-        auto frameData = std::make_unique<uint8_t[]>(totalElementCount);
-        std::memcpy(frameData.get(), reinterpret_cast<uint8_t*>(rawImage.data), totalElementCount);
-
         auto image = std::make_shared<SDK::v1::Image>();
-        auto imageData = std::make_unique<SDK::v1::ImageData>(frameData.get(), totalElementCount);
+        auto imageData =
+            std::make_unique<SDK::v1::ImageData>(reinterpret_cast<uint8_t*>(rawImage.data), totalElementCount);
         const VCA::SDK::v1::ImageDetail imageDetail(
             VCA::SDK::v1::CameraInformation(cameraUniqueId(), "1"),
             VCA::SDK::v1::ImageInformation(imageSequenceCounter(), rawImage.cols, rawImage.rows, "BGR8"),
@@ -62,9 +62,15 @@ namespace VCA::EXAMPLES
         return image;
     }
 
-    void NumbersCamera::startImageAcquisition() {}
+    void NumbersCamera::startImageAcquisition()
+    {
+        LOG_NUMBERS_PLUGIN_INFO("Image acquisition started for camera with unique id '" + cameraUniqueId() + "'");
+    }
 
-    void NumbersCamera::stopImageAcquisition() {}
+    void NumbersCamera::stopImageAcquisition()
+    {
+        LOG_NUMBERS_PLUGIN_INFO("Image acquisition stopped for camera with unique id '" + cameraUniqueId() + "'");
+    }
 
     SDK::v1::CameraParameters NumbersCamera::getConfig()
     {
@@ -160,4 +166,4 @@ namespace VCA::EXAMPLES
         return SDK::v1::CameraStatus(status);
     }
 
-} // namespace VCA::EXAMPLES
+} // namespace VCA::Numbers

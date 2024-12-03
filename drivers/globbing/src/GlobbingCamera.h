@@ -1,9 +1,8 @@
 #pragma once
-#include "Camera.h"
-
+#include <Camera.h>
 #include <vector>
 
-namespace VCA::EXAMPLES
+namespace VCA::Globbing
 {
     class GlobbingCamera : public VCA::SDK::v1::Camera
     {
@@ -32,4 +31,4 @@ namespace VCA::EXAMPLES
 
         void collectImages();
     };
-} // namespace VCA::EXAMPLES
+} // namespace VCA::Globbing

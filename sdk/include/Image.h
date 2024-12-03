@@ -11,9 +11,9 @@
 #include "ImageMetadata.h"
 
 #include <cstddef>
+#include <cstring>
 #include <memory>
 #include <utility>
-#include <cstring>
 
 namespace VCA::SDK::v1
 {
@@ -46,8 +46,8 @@ namespace VCA::SDK::v1
         Image(size_t bufferSize);
         ~Image() = default;
 
+        void addImagePart(uint8_t* buffer, size_t bufferSize, const SDK::v1::ImageDetail& imageDetail);
         void addImagePart(std::unique_ptr<ImageData> imageData, const SDK::v1::ImageDetail& imageDetail);
-        void addImagePart(uint8_t* buffer, size_t& bufferSize, const SDK::v1::ImageDetail& imageDetail);
 
         int count();
 

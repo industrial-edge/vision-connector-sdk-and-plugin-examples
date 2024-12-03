@@ -1,6 +1,7 @@
 #include "DahengConnector.h"
 
 #include "DahengCamera.h"
+#include "DahengPluginLogger.h"
 
 #include <vector>
 

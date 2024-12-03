@@ -23,7 +23,7 @@ cv::Mat putTextOnImage(const cv::Mat& image, const std::string& text, double fon
 
 TEST(TestNumbersCamera, testCameraStatus)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("");
     EXPECT_EQ(numbersCamera.getStatus().status(), VCA::SDK::v1::CameraStatus::Status::OFFLINE);
     numbersCamera.connect();
     EXPECT_EQ(numbersCamera.getStatus().status(), VCA::SDK::v1::CameraStatus::Status::ONLINE);
@@ -33,7 +33,7 @@ TEST(TestNumbersCamera, testCameraStatus)
 
 TEST(TestNumbersCamera, testAcquireRedImage)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("red");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("red");
     numbersCamera.connect();
 
     auto image1 = numbersCamera.acquireImage();
@@ -52,7 +52,7 @@ TEST(TestNumbersCamera, testAcquireRedImage)
 
 TEST(TestNumbersCamera, testAcquireGreenImage)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("green");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("green");
     numbersCamera.connect();
 
     auto image1 = numbersCamera.acquireImage();
@@ -71,7 +71,7 @@ TEST(TestNumbersCamera, testAcquireGreenImage)
 
 TEST(TestNumbersCamera, testAcquireBlueImage)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("blue");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("blue");
     numbersCamera.connect();
 
     auto image1 = numbersCamera.acquireImage();
@@ -90,7 +90,7 @@ TEST(TestNumbersCamera, testAcquireBlueImage)
 
 TEST(TestNumbersCamera, testAcquireBlackImage)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("");
     numbersCamera.connect();
 
     auto image1 = numbersCamera.acquireImage();
@@ -109,7 +109,7 @@ TEST(TestNumbersCamera, testAcquireBlackImage)
 
 TEST(TestNumbersCamera, testAcquireModifiedImage)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("");
     numbersCamera.connect();
 
     VCA::SDK::v1::CameraParameter widthParameter;
@@ -176,7 +176,7 @@ TEST(TestNumbersCamera, testAcquireModifiedImage)
 
 TEST(TestNumbersCamera, testAcquireImageWithIncreasedFPS)
 {
-    auto numbersCamera = VCA::EXAMPLES::NumbersCamera("");
+    auto numbersCamera = VCA::Numbers::NumbersCamera("");
     numbersCamera.connect();
 
     VCA::SDK::v1::CameraParameter fpsParameter;
