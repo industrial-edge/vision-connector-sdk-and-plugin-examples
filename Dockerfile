@@ -9,6 +9,8 @@ ARG COMMON_LIB_PATH
 ENV PATH=${COMMON_PATH}:${PATH}
 ENV LIBRARY_PATH=${COMMON_LIB_PATH}:${LIBRARY_PATH}
 ENV LD_LIBRARY_PATH=${COMMON_LIB_PATH}:${LD_LIBRARY_PATH}
+RUN apt update
+RUN apt install -y git git-lfs
 COPY requirements ./requirements
 RUN chmod -R +x ./requirements
 RUN ./requirements/install_build_requirements.sh

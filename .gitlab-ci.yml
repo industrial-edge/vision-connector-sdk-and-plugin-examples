@@ -12,9 +12,9 @@ variables:
   CLEARED_DEBIAN_IMAGE: debian:bullseye-20221219-slim
 
   DRIVER_BUILD_IMAGE: ie-vision-connector-driver-build-image
-  DRIVER_BUILD_IMAGE_TAG: '0.0.5'
+  DRIVER_BUILD_IMAGE_TAG: '0.0.6'
   DRIVER_TEST_IMAGE: ie-vision-connector-driver-test-image
-  DRIVER_TEST_IMAGE_TAG: '0.0.5'
+  DRIVER_TEST_IMAGE_TAG: '0.0.6'
 
 stages:
   - check_img
