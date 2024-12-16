@@ -94,7 +94,7 @@ namespace VCA::baslerll
 
     baslerllCamera::baslerllCamera(const std::string& cameraType) : Camera(cameraType)
     {
-        m_version = "0.0.2";
+        setVersion("0.0.2");
     }
 
     std::shared_ptr<VCA::SDK::v1::Image> baslerllCamera::acquireImage()
@@ -130,7 +130,7 @@ namespace VCA::baslerll
         PylonInitialize();
         CTlFactory& TlFactory = CTlFactory::GetInstance();
         pTl = TlFactory.CreateTl(Camera_t::DeviceClass());
-        camera = std::make_unique<Camera_t>(pTl->CreateDevice(m_uniqueId.c_str()));
+        camera = std::make_unique<Camera_t>(pTl->CreateDevice(cameraUniqueId().c_str()));
         camera->Open();
     }
 

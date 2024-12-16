@@ -6,7 +6,9 @@ using namespace std;
 namespace VCA::basler
 {
 
-    baslerCamera::baslerCamera(const std::string& cameraType) : Camera(cameraType) {}
+    baslerCamera::baslerCamera(const std::string& cameraType) : Camera(cameraType) {
+        setVersion("0.0.1");
+    }
 
     std::string baslerCamera::pixelTypeToString(EPixelType pixelType)
     {
@@ -122,7 +124,7 @@ namespace VCA::basler
     {
         PylonInitialize();
         CTlFactory& TlFactory = CTlFactory::GetInstance();
-        m_camera = std::make_unique<CInstantCamera>(TlFactory.CreateDevice(m_uniqueId.c_str()));
+        m_camera = std::make_unique<CInstantCamera>(TlFactory.CreateDevice(cameraUniqueId().c_str()));
         m_camera->MaxNumBuffer = 10;
     }
 
