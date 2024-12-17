@@ -201,7 +201,10 @@ namespace VCA::baslerll
     void baslerllCamera::Close()
     {
         CTlFactory& TlFactory = CTlFactory::GetInstance();
-        camera->Close();
+        if (camera->IsOpen()) 
+        {
+            camera->Close();
+        }
         TlFactory.ReleaseTl(pTl);
         camera.reset();
         PylonTerminate();
@@ -213,6 +216,7 @@ namespace VCA::baslerll
         bool closed = camera == nullptr;
         if (closed)
         {
+            std::cout << "Camera is closed, opening camera..." << std::endl;
             Open();
         }
         auto symbPrepare = [](StringList_t sl)
@@ -233,6 +237,7 @@ namespace VCA::baslerll
         widthParam.setMax(to_string(camera->WidthMax.GetValue()));
         widthParam.setIncrement("1");
         cameraParameters.push_back(widthParam);
+        std::cout << "Width parameter added: " << widthParam.value() << std::endl;
 
         auto heightParam = SDK::v1::CameraParameter::CreateParameter(
             SDK::v1::ParameterType::Int, "Height", to_string(camera->Height.GetValue()), "Image height", false);
@@ -240,95 +245,139 @@ namespace VCA::baslerll
         heightParam.setMax(to_string(camera->HeightMax.GetValue()));
         heightParam.setIncrement("1");
         cameraParameters.push_back(heightParam);
+        std::cout << "Height parameter added: " << heightParam.value() << std::endl;
 
-        bool afrrate = CBooleanParameter(nodemap, "AcquisitionFrameRateEnable").GetValue();
-        auto acfrEnabled =
-            SDK::v1::CameraParameter::CreateParameter(SDK::v1::ParameterType::Bool, "Acquition Frame Rate Enabled",
-                                                      afrrate ? "1" : "0", "Acquition Frame Rate Enabled", false);
-        cameraParameters.push_back(acfrEnabled);
+        if(nodemap->GetNode("AcquisitionFrameRateEnable"))
+        {
+            std::cout << "Accessing AcquisitionFrameRateEnable node..." << std::endl;
+            bool afrrate = CBooleanParameter(nodemap, "AcquisitionFrameRateEnable").GetValue();
+            auto acfrEnabled =
+                SDK::v1::CameraParameter::CreateParameter(SDK::v1::ParameterType::Bool, "Acquition Frame Rate Enabled",
+                                                        afrrate ? "1" : "0", "Acquition Frame Rate Enabled", false);
+            cameraParameters.push_back(acfrEnabled);
+            std::cout << "Acquisition Frame Rate Enabled parameter added: " << acfrEnabled.value() << std::endl;
+        }
 
-        CFloatParameter(nodemap, "AcquisitionFrameRate").GetValue();
+        if(nodemap->GetNode("AcquisitionFrameRate"))
+        {
+            std::cout << "Accessing AcquisitionFrameRate node..." << std::endl;
+            CFloatParameter(nodemap, "AcquisitionFrameRate").GetValue();
 
-        auto acfr = SDK::v1::CameraParameter::CreateParameter(
-            SDK::v1::ParameterType::Float, "Acquisition Frame Rate",
-            to_string(CFloatParameter(nodemap, "AcquisitionFrameRate").GetValue()), "Acquisition Frame Rate", false);
-        acfr.setMin("0");
-        acfr.setMax("100");
-        acfr.setIncrement("0.01");
-        cameraParameters.push_back(acfr);
+            auto acfr = SDK::v1::CameraParameter::CreateParameter(
+                SDK::v1::ParameterType::Float, "Acquisition Frame Rate",
+                to_string(CFloatParameter(nodemap, "AcquisitionFrameRate").GetValue()), "Acquisition Frame Rate", false);
+            acfr.setMin("0");
+            acfr.setMax("100");
+            acfr.setIncrement("0.01");
+            cameraParameters.push_back(acfr);
+            std::cout << "Acquisition Frame Rate parameter added: " << acfr.value() << std::endl;
+        }
 
-        auto en = CEnumParameter(nodemap, "TriggerMode");
-        StringList_t sl;
-        en.GetSymbolics(sl);
+        if(nodemap->GetNode("TriggerMode"))
+        {
+            std::cout << "Accessing TriggerMode node..." << std::endl;
+            auto en = CEnumParameter(nodemap, "TriggerMode");
+            StringList_t sl;
+            en.GetSymbolics(sl);
 
-        auto triggerMode = SDK::v1::CameraParameter::CreateParameter(
-            SDK::v1::ParameterType::Enum, "Trigger Mode", std::string(sl.at(en.GetIntValue())), "Trigger Mode", false);
+            auto triggerMode = SDK::v1::CameraParameter::CreateParameter(
+                SDK::v1::ParameterType::Enum, "Trigger Mode", std::string(sl.at(en.GetIntValue())), "Trigger Mode", false);
 
-        triggerMode.setSymbolics(symbPrepare(sl));
-        cameraParameters.push_back(triggerMode);
+            triggerMode.setSymbolics(symbPrepare(sl));
+            cameraParameters.push_back(triggerMode);
+            std::cout << "Trigger Mode parameter added: " << triggerMode.value() << std::endl;
+        }
+        std::string currentLightMode = "Off";
+        if(nodemap->GetNode("BslLightControlMode"))
+        {
+            std::cout << "Accessing BslLightControlMode node..." << std::endl;
+            auto lcm = CEnumParameter(nodemap, "BslLightControlMode");
+            StringList_t slSelectedLightControl;
+            lcm.GetSymbolics(slSelectedLightControl);
 
-        auto lcm = CEnumParameter(nodemap, "BslLightControlMode");
-        StringList_t slSelectedLightControl;
-        en.GetSymbolics(slSelectedLightControl);
+            currentLightMode = std::string(slSelectedLightControl[lcm.GetIntValue()]);
+            auto blsLightMode = SDK::v1::CameraParameter::CreateParameter(
+                SDK::v1::ParameterType::Enum, "BslLightControlMode", currentLightMode, "BslLightControlMode", false);
 
-        std::string currentLightMode = std::string(slSelectedLightControl[lcm.GetIntValue()]);
-        auto blsLightMode = SDK::v1::CameraParameter::CreateParameter(
-            SDK::v1::ParameterType::Enum, "BslLightControlMode", currentLightMode, "BslLightControlMode", false);
-
-        blsLightMode.setSymbolics(symbPrepare(slSelectedLightControl));
-        cameraParameters.push_back(blsLightMode);
+            blsLightMode.setSymbolics(symbPrepare(slSelectedLightControl));
+            cameraParameters.push_back(blsLightMode);
+            std::cout << "BslLightControlMode parameter added: " << blsLightMode.value() << std::endl;
+        }
 
         if (currentLightMode == "On")
         {
-            CCommandParameter(nodemap, "BslLightControlEnumerateDevices").Execute();
-            // Select light device 1
+            if(nodemap->GetNode("BslLightControlEnumerateDevices"))
+            {
+                std::cout << "Accessing BslLightControlEnumerateDevices node..." << std::endl;
+                CCommandParameter(nodemap, "BslLightControlEnumerateDevices").Execute();
+                std::cout << "Executed BslLightControlEnumerateDevices command" << std::endl;
+            }
+            if(nodemap->GetNode("BslLightDeviceSelector"))
+            {
+                std::cout << "Accessing BslLightDeviceSelector node..." << std::endl;
+                auto ldsNode = CEnumParameter(nodemap, "BslLightDeviceSelector");
+                StringList_t slLightControlSelector;
+                ldsNode.GetSymbolics(slLightControlSelector);
 
-            auto ldsNode = CEnumParameter(nodemap, "BslLightDeviceSelector");
-            StringList_t slLightControlSelector;
-            ldsNode.GetSymbolics(slLightControlSelector);
+                auto lds = SDK::v1::CameraParameter::CreateParameter(
+                    SDK::v1::ParameterType::Enum, "BslLightDeviceSelector",
+                    std::string(slLightControlSelector.at(ldsNode.GetIntValue())), "BslLightDeviceSelector", false);
 
-            auto lds = SDK::v1::CameraParameter::CreateParameter(
-                SDK::v1::ParameterType::Enum, "BslLightDeviceSelector",
-                std::string(slLightControlSelector.at(ldsNode.GetIntValue())), "BslLightDeviceSelector", false);
+                lds.setSymbolics(symbPrepare(slLightControlSelector));
+                cameraParameters.push_back(lds);
+                std::cout << "BslLightDeviceSelector parameter added: " << lds.value() << std::endl;
+            }
 
-            lds.setSymbolics(symbPrepare(slLightControlSelector));
-            cameraParameters.push_back(lds);
-
-            // Set the nominal current of device 1 to 100 mA
-            float current = CFloatParameter(nodemap, "BslLightDeviceCurrent").GetValue();
-            auto ldc = SDK::v1::CameraParameter::CreateParameter(SDK::v1::ParameterType::Float, "BslLightDeviceCurrent",
-                                                                 to_string(current), "BslLightDeviceCurrent", false);
-            ldc.setMin("0");
-            ldc.setMax("100");
-            ldc.setIncrement("0.1");
-            cameraParameters.push_back(ldc);
+            if(nodemap->GetNode("BslLightDeviceCurrent"))
+            {
+                std::cout << "Accessing BslLightDeviceCurrent node..." << std::endl;
+                float current = CFloatParameter(nodemap, "BslLightDeviceCurrent").GetValue();
+                auto ldc = SDK::v1::CameraParameter::CreateParameter(SDK::v1::ParameterType::Float, "BslLightDeviceCurrent",
+                                                                    to_string(current), "BslLightDeviceCurrent", false);
+                ldc.setMin("0");
+                ldc.setMax("100");
+                ldc.setIncrement("0.1");
+                cameraParameters.push_back(ldc);
+                std::cout << "BslLightDeviceCurrent parameter added: " << ldc.value() << std::endl;
+            }
 
             // Set the brightness to 100 %
-            float bright = CFloatParameter(nodemap, "BslLightDeviceBrightness").GetValue();
-            auto ldb =
-                SDK::v1::CameraParameter::CreateParameter(SDK::v1::ParameterType::Float, "BslLightDeviceBrightness",
-                                                          to_string(bright), "BslLightDeviceBrightness", false);
-            ldb.setMin("0");
-            ldb.setMax("100");
-            ldb.setIncrement("0.1");
-            cameraParameters.push_back(ldb);
+            if(nodemap->GetNode("BslLightDeviceBrightness"))
+            {
+                std::cout << "Accessing BslLightDeviceBrightness node..." << std::endl;
+                float bright = CFloatParameter(nodemap, "BslLightDeviceBrightness").GetValue();
+                auto ldb =
+                    SDK::v1::CameraParameter::CreateParameter(SDK::v1::ParameterType::Float, "BslLightDeviceBrightness",
+                                                            to_string(bright), "BslLightDeviceBrightness", false);
+                ldb.setMin("0");
+                ldb.setMax("100");
+                ldb.setIncrement("0.1");
+                cameraParameters.push_back(ldb);
+                std::cout << "BslLightDeviceBrightness parameter added: " << ldb.value() << std::endl;
+            }
 
             // Set the operation mode to Strobe
-            auto ldomNode = CEnumParameter(nodemap, "BslLightDeviceOperationMode");
-            StringList_t slLightDeviceOperationMode;
-            ldomNode.GetSymbolics(slLightDeviceOperationMode);
+            if(nodemap->GetNode("BslLightDeviceOperationMode"))
+            {
+                std::cout << "Accessing BslLightDeviceOperationMode node..." << std::endl;
+                auto ldomNode = CEnumParameter(nodemap, "BslLightDeviceOperationMode");
+                StringList_t slLightDeviceOperationMode;
+                ldomNode.GetSymbolics(slLightDeviceOperationMode);
 
-            auto ldom = SDK::v1::CameraParameter::CreateParameter(
-                SDK::v1::ParameterType::Enum, "BslLightDeviceOperationMode",
-                std::string(slLightDeviceOperationMode.at(ldomNode.GetIntValue())), "BslLightDeviceOperationMode",
-                false);
+                auto ldom = SDK::v1::CameraParameter::CreateParameter(
+                    SDK::v1::ParameterType::Enum, "BslLightDeviceOperationMode",
+                    std::string(slLightDeviceOperationMode.at(ldomNode.GetIntValue())), "BslLightDeviceOperationMode",
+                    false);
 
-            ldom.setSymbolics(symbPrepare(slLightDeviceOperationMode));
-            cameraParameters.push_back(ldom);
+                ldom.setSymbolics(symbPrepare(slLightDeviceOperationMode));
+                cameraParameters.push_back(ldom);
+                std::cout << "BslLightDeviceOperationMode parameter added: " << ldom.value() << std::endl;
+            }
         }
 
         if (closed)
         {
+            std::cout << "Closing camera..." << std::endl;
             Close();
         }
         // Push paramaters
@@ -363,13 +412,19 @@ namespace VCA::baslerll
             }
             else if (parameterName == "Acquition Frame Rate Enabled")
             {
-                CBooleanParameter(nodemap, "AcquisitionFrameRateEnable").SetValue(parameterValue == "1");
-                status = true;
+                if(nodemap->GetNode("AcquisitionFrameRateEnable"))
+                {
+                    CBooleanParameter(nodemap, "AcquisitionFrameRateEnable").SetValue(parameterValue == "1");
+                    status = true;
+                }
             }
             else if (parameterName == "Acquisition Frame Rate")
             {
-                CFloatParameter(nodemap, "AcquisitionFrameRate").SetValue(std::stof(parameterValue));
-                status = true;
+                if(nodemap->GetNode("AcquisitionFrameRate"))
+                {
+                    CFloatParameter(nodemap, "AcquisitionFrameRate").SetValue(std::stof(parameterValue));
+                    status = true;
+                }
             }
             else if (parameterName == "Trigger Mode")
             {
@@ -379,23 +434,38 @@ namespace VCA::baslerll
             }
             else if (parameterName == "BslLightControlMode")
             {
-                status = CEnumParameter(nodemap, "BslLightControlMode").TrySetValue(parameterValue.c_str());
+                if(nodemap->GetNode("BslLightControlMode"))
+                {
+                    status = CEnumParameter(nodemap, "BslLightControlMode").TrySetValue(parameterValue.c_str());
+                }
             }
             else if (parameterName == "BslLightDeviceSelector")
             {
-                status = CEnumParameter(nodemap, "BslLightDeviceSelector").TrySetValue(parameterValue.c_str());
+                if(nodemap->GetNode("BslLightDeviceSelector"))
+                {
+                    status = CEnumParameter(nodemap, "BslLightDeviceSelector").TrySetValue(parameterValue.c_str());
+                }
             }
             else if (parameterName == "BslLightDeviceCurrent")
             {
-                status = CFloatParameter(nodemap, "BslLightDeviceCurrent").TrySetValue(std::stof(parameterValue));
+                if(nodemap->GetNode("BslLightDeviceSelector"))
+                {
+                    status = CFloatParameter(nodemap, "BslLightDeviceCurrent").TrySetValue(std::stof(parameterValue));
+                }
             }
             else if (parameterName == "BslLightDeviceBrightness")
             {
-                status = CFloatParameter(nodemap, "BslLightDeviceBrightness").TrySetValue(std::stof(parameterValue));
+                if(nodemap->GetNode("BslLightDeviceSelector"))
+                {
+                    status = CFloatParameter(nodemap, "BslLightDeviceBrightness").TrySetValue(std::stof(parameterValue));
+                }
             }
             else if (parameterName == "BslLightDeviceOperationMode")
             {
-                status = CEnumParameter(nodemap, "BslLightDeviceOperationMode").TrySetValue(parameterValue.c_str());
+                if(nodemap->GetNode("BslLightDeviceSelector"))
+                {
+                    status = CEnumParameter(nodemap, "BslLightDeviceOperationMode").TrySetValue(parameterValue.c_str());
+                }
             }
 
             parameterStatuses.push_back(SDK::v1::CameraParameterStatus(
