@@ -14,10 +14,3 @@ namespace VCA::baslerll
         std::shared_ptr<VCA::SDK::v1::Camera> createCamera(const std::string& cameraId) const override;
     };
 } // namespace VCA::baslerll
-
-#ifndef TESTING
-extern "C" VCA::SDK::v1::CameraConnector* createCameraConnector()
-{
-    return new VCA::baslerll::baslerllConnector();
-}
-#endif
