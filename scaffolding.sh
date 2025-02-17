@@ -54,20 +54,4 @@ jq --arg DRIVER $1 --arg DRIVER_LOWER ${1,,} '
 echo -e "\nif(TARGET_DRIVER STREQUAL ${1^^})\n\tadd_subdirectory(drivers/${1,,})\nendif()" >> CMakeLists.txt
 
 
-# Preparing CI for new driver
-
-echo "
-test_${1,,}_driver:
-  extends: .driver_test_base
-  variables:
-    DRIVER_NAME: ${1,,}
-
-build_${1,,}_driver:
-  extends: .driver_build_base
-  needs:
-    - test_${1,,}_driver
-  variables:
-    DRIVER_NAME: ${1,,}" >> ".gitlab-ci.yml"
-
-
 echo "Created on ${PWD}/drivers/${1,,}"

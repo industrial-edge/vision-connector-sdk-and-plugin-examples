@@ -1,9 +1,0 @@
-output/
-.vs/
-.vscode/
-.cache/
-out/
-build/
-compile_commands.json
-Testing/
-installed_drivers/
