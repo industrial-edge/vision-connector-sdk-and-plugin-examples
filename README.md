@@ -23,7 +23,7 @@
 
 The Industrial Edge Vision Connector App, or VCA for short combines industrial cameras with the Industrial Edge ecosystem. The Vision Connector uses an Ethernet interface to establish a connection to the cameras. The VCA publishes the data using the ZeroMQ server integrated in the Vision Connector with high throughput to other applications.
 
-As of version 1.1.0 it is possible to integrate any camera vendor's C++ API with simple implementation steps through custom camera connectors for VCA. To start the development of a camera connector the following are required:
+As of version 1.2.0 it is possible to integrate any camera vendor's C++ API with simple implementation steps through custom camera connectors for VCA. To start the development of a camera connector the following are required:
  - the API documentation of the camera vendor,
  - the C++ headers and libraries of the camera API,
  - the VCA Drivers repository with its utility tools.
@@ -137,6 +137,13 @@ To get familiar with VCA SDK and the provided interfaces please read the [VCA SD
 
 ## Creating and using a custom camera connector
 The [Creating and using a custom camera connector](docs/creating_and_using_a_custom_camera_connector.md) documentation contains a walktrough to create a new camera connector from scratch and use it in VCA. 
+
+## Contribution
+
+Thank you for your interest in contributing. Anybody is free to report bugs, unclear documentation, and other problems regarding this repository in the Issues section.
+Additionally everybody is free to propose any changes to this repository using Pull Requests.
+
+If you haven't previously signed the [Siemens Contributor License Agreement](https://cla-assistant.io/industrial-edge/) (CLA), the system will automatically prompt you to do so when you submit your Pull Request. This can be conveniently done through the CLA Assistant's online platform. Once the CLA is signed, your Pull Request will automatically be cleared and made ready for merging if all other test stages succeed.
 
 ## License and Legal Information
 
