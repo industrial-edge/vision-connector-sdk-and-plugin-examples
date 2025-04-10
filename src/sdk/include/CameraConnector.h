@@ -1,12 +1,3 @@
-/*
- * File: CameraConnector.h
- * Project: Vision Connector
- * File Created: 2023.09.08
- * Author: By Siemens AG
- * -----
- * Copyright (C) Siemens AG 2023. All Rights Reserved. Confidential.
- */
-
 #pragma once
 #include "Camera.h"
 

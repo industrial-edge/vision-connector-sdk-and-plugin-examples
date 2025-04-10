@@ -1,12 +1,3 @@
-/*
- * File: CameraParameterStatus.h
- * Project: Vision Connector
- * File Created: 2024.02.06
- * Author: By Siemens AG
- * -----
- * Copyright (C) Siemens AG 2024. All Rights Reserved. Confidential.
- */
-
 #pragma once
 #include "ObjectContainer.h"
 
