@@ -1,0 +1,99 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "vca-drivers-base-config",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "1",
+        "SDK_LIBRARY_DIR": "${sourceDir}/sdk",
+        "SDK_INCLUDE_DIR": "${sourceDir}/sdk/include",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/installed_drivers"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "vca-drivers-tests-base-config",
+      "hidden": true,
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TESTING": "ON",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "daheng-debug",
+      "displayName": "Daheng Debug Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "DAHENG",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "daheng-release",
+      "displayName": "Daheng Release Config",
+      "inherits": "vca-drivers-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "DAHENG",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "daheng-tests",
+      "displayName": "Daheng Tests Config",
+      "inherits": "vca-drivers-tests-base-config",
+      "cacheVariables": {
+        "TARGET_DRIVER": "DAHENG"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "daheng-debug-build",
+      "displayName": "Daheng Debug Build",
+      "configurePreset": "daheng-debug",
+      "targets": [
+        "daheng"
+      ]
+    },
+    {
+      "name": "daheng-release-build",
+      "displayName": "Daheng Release Build",
+      "configurePreset": "daheng-release",
+      "targets": [
+        "daheng",
+        "install"
+      ]
+    },
+    {
+      "name": "daheng-tests-build",
+      "displayName": "Daheng Tests Build",
+      "configurePreset": "daheng-tests",
+      "targets": [
+        "daheng-Test"
+      ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "daheng-tests",
+      "displayName": "Daheng Tests",
+      "configurePreset": "daheng-tests"
+    }
+  ]
+}
