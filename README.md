@@ -32,7 +32,7 @@ This project was created to introduce you to the Vision Connector drivers featur
 To develop a custom camera connector, the developer should meet the following requirements:
 - Familiarity with the Vision Connector application and its features.
 - Understanding of the VCA SDK, including structure and usage.
-- Working knwoledge of C++ and build tools such as CMake
+- Working knowledge of C++ and build tools such as CMake
 - A properly set up development environment aligned with the project requirements.
 - Access to the camera vendor's API documentation.
 - Availability of the camera vendor's C++ headers and libraries required for teh integration.
