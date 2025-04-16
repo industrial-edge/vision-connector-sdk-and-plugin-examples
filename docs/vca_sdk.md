@@ -15,6 +15,7 @@
         * **[Virtual methods](#virtual-methods)**
     * **[Camera class](#camera-class)**
         * **[Virtual methods](#virtual-methods-1)**
+        * **[Locking policy](#locking-policy)**
 
 ## Overview
 The VCA SDK is a separately built library which allows users to create their own camera connectors and use them with VCA. The VCA Drivers repository contains a pre-built version of this SDK with the necessary header files under the ```sdk``` folder. Every custom camera connector package has to contain the ```libVCA-SDK.so``` and the custom camera conenctor library has to link to this .so file.
@@ -78,7 +79,7 @@ Custom exception for camera related errors
 The actual behaviour of the custom camera connector is defined by the re-implementation of the ```CameraConnector``` and ```Camera``` abstract classes.
 
 ### CameraConnector class
-This class is responsible for the discovery of corresponding cameras and the unique ID specific camera creation.
+This class is responsible for the discovery of corresponding cameras and the unique ID specific camera creation. The unique ID is a special identifier of the cameras and is used for connection.
 
 #### Virtual methods
  - **```discover```**<br>
@@ -130,3 +131,10 @@ Has to return the list ```CameraParameterStatuses```.
 
  - **```setVersion```**<br>
 Sets the camera connector's internal version which then becomes part of the camera configuration. Default value: <b>Not Defined</b>
+
+
+#### Locking policy
+The Camera class ensures thread safe access to the underlying camera device. This is done by synchronizing the ```acquireImage```, ```getConfig```, ```setConfig```, ```startImageAcquisition``` and ```startImageAcquisition``` methods through the ```m_cameraAccessMutex``` mutex. The ```m_cameraAccessMutex``` MUST NOT be used in custom camera class implementation.
+<br>
+
+To ensure the responsivity of the camera the implementation of ```acquireImage```, ```getConfig```, ```setConfig```, ```startImageAcquisition``` and ```stopImageAcquisition``` methods MUST NOT contain active blocking logic.
