@@ -12,16 +12,16 @@
 * **[Testing the connector](#testing-the-connector)**
 * **[Installing the connector](#installing-the-connector)**
 * **[Packaging the connector](#packaging-the-connector)**
-* **[Using the connector in VCA](#using-the-connector-in-vca)**
+* **[Using the connector in Vision Connector](#using-the-connector-in-vision-connector)**
 
 ## Overview
-In this walkthrough we will create an OpenCV based camera connector called ```NumbersWithFileLogger``` and load it into VCA. The cameras of this camera connector will give us colored images with increasing numbers written on them. As the name suggests we shall also implement our own logging logic as part of the camera connector.
+In this walkthrough we will create an OpenCV based camera connector called ```NumbersWithFileLogger``` and load it into Vision Connector. The cameras of this camera connector will give us colored images with increasing numbers written on them. As the name suggests we shall also implement our own logging logic as part of the camera connector.
 
-The following guide has the assumption that the development environment is up, CMake is used as build tool and VSCode as IDE. It is important to set the working directory to the ```src``` folder located in the repository root.
+The following guide assumes that the development environment is set up, CMake is used as build tool and VSCode as IDE. It is important to set the working directory to the ```src``` folder located in the repository root.
 
 ## Creating the connector
 ### Scaffolding
-Navigate to the ```src``` folder of the VCA Drivers repository.
+Navigate to the ```src``` folder of the Vision Connector Drivers repository.
 First we need the skeleton of the new camera connector. For that we shall use the ```scaffolding``` script:
 ```
 ./scaffolding.sh NumbersWithFileLogger
@@ -36,12 +36,12 @@ After running the script we should have the ```CMakeLists.txt``` and ```CMakePre
             - `Place 3rd party libs here.txt`
         - `src/`
             - `NumbersWithFileLoggerApi.cpp`
-            - `NumbersWithFileLoggerApi.h` - Contains the exposed functions used by VCA
+            - `NumbersWithFileLoggerApi.h` - Contains the exposed functions used by Vision Connector
             - `NumbersWithFileLoggerCamera.cpp` - Contains the main logic for the camera
             - `NumbersWithFileLoggerCamera.h`
             - `NumbersWithFileLoggerConnector.cpp` - Contains the main logic for camera discovery and camera creation
             - `NumbersWithFileLoggerConnector.h`
-            - `NumbersWithFileLoggerPluginLogger.h` - Contains this camera connectors specific logging macros and the logger instance
+            - `NumbersWithFileLoggerPluginLogger.h` - Contains this camera connector's specific logging macros and the logger instance
     - `tests/`
         - `CMakeLists.txt` - CMakeLists.txt file with the test configuration
         - `testMain.cpp` - Entry point for the gtest based tests
@@ -57,7 +57,7 @@ find_package(OpenCV REQUIRED)
 target_link_libraries(${LIBRARY_NAME} PRIVATE opencv_core opencv_videoio ${LIBS})
 ```
 
-The modified CMakeLists.txt file look like this in the affected areas:
+The modified CMakeLists.txt file looks like this in the affected areas:
 ```
 ...
 include_directories(${SDK_INCLUDE_DIR})
@@ -82,10 +82,10 @@ target_compile_options(${LIBRARY_NAME} PRIVATE -fno-gnu-unique)
 install(TARGETS ${LIBRARY_NAME} DESTINATION ${LIBRARY_NAME})
 ...
 ```
-Refer to the ```CMakeLists.txt``` files of the examples to get more insights how to structure these files.
+Refer to the ```CMakeLists.txt``` files of the examples to get more insights on how to structure these files.
 
 ### Configure and build new custom camera connector
-After the ```scaffolding``` new configuration and build presets are available. To continue the development of the camera connector we have to configure our new project. This can be done from the IDE or from the terminal by running one of these commands:
+After the ```scaffolding```, new configuration and build presets are available. To continue the development of the camera connector we have to configure our new project. This can be done from the IDE or from the terminal by running one of these commands:
 ```
 cmake --preset numberswithfilelogger-debug
 ```
@@ -107,9 +107,9 @@ depending on the previously selected configuration.
 After this we should have the ```libnumberswithfilelogger.so``` file generated in the output directory.
 
 ### Implementing NumbersWithFileLoggerConnector class
-As mentioned before the ```CameraConnector``` class is responsible for discovering and creating cameras. The ```NumbersWithFileLoggerConnector``` derived class has to contain the camera specific logic for discovery and creation of the.
+The ```CameraConnector``` class is responsible for discovering and creating cameras. The ```NumbersWithFileLoggerConnector``` derived class has to contain the camera specific logic for discovery and creation.
 
-In this example we shall modify the ```discover``` method so it returns a list of colors as unique ids for the possible cameras.
+In this example we shall modify the ```discover``` method so it returns a list of colors as unique IDs for the possible cameras.
 
 Modified code:
 ```
@@ -118,13 +118,13 @@ std::vector<std::string> NumbersWithFileLoggerConnector::discover() const
     return {"red", "green", "blue", "black"};
 }
 ```
-After loading the finalized camera connector in VCA we shall see this list from UI.
+After loading the finalized camera connector in Vision Connector we shall see this list from UI.
 
 ### Implementing NumbersWithFileLoggerCamera class
-Compared to the ```CameraConnector``` the ```Camera``` class is more complex because of its overall functioning. That said first we shall define a few member variable so that we can track the state of the camera.
+Compared to the ```CameraConnector```, the ```Camera``` class is more complex because of its overall functioning. First, we shall define a few member variables so that we can track the state of the camera.
 
 Updated NumbersWithFileLoggerCamera.h:
-```
+```cpp
 private:
     int m_width = 1920;
     int m_height = 1080;
@@ -136,12 +136,12 @@ private:
     int m_fps = 1;
 ```
 
-With these variables we are defining a default state for the cameras and we are also able to change the behaviour of the cameras at runtime.
+With these variables we are defining a default state for the cameras and we are also able to change the behavior of the cameras at runtime.
 
 Next let's update the ```NumbersWithFileLoggerCamera.cpp``` file method-by-method.
 
-Updated ```NumbersWithFileLoggerCamera.cpp``` constructor to set the unique id defined background color:
-```
+Updated ```NumbersWithFileLoggerCamera.cpp``` constructor to set the unique ID defined background color:
+```cpp
 NumbersWithFileLoggerCamera::NumbersWithFileLoggerCamera(const std::string& uniqueId) : Camera(uniqueId)
 {
     if (uniqueId == "red")
@@ -163,8 +163,8 @@ NumbersWithFileLoggerCamera::NumbersWithFileLoggerCamera(const std::string& uniq
 }
 ```
 
-Now we have every variable set which are required to generate and acquire images. The updated acquireImage method looks like this:
-```
+Now we have every variable set which is required to generate and acquire images. The updated acquireImage method looks like this:
+```cpp
 std::shared_ptr<VCA::SDK::v1::Image> NumbersWithFileLoggerCamera::acquireImage()
 {
     increaseImageSequenceCounter();
@@ -197,26 +197,26 @@ std::shared_ptr<VCA::SDK::v1::Image> NumbersWithFileLoggerCamera::acquireImage()
 }
 ```
 
-With the exception of ```increaseImageSequenceCounter();``` which we use to update the displayed counter up until ```auto image = std::make_shared<SDK::v1::Image>();``` everything is OpenCV specific code. This part of the code varies from one camera vendor API to another.
+With the exception of ```increaseImageSequenceCounter();``` which we use to update the displayed counter up until ```auto image = std::make_shared<SDK::v1::Image>();```, everything is OpenCV specific code. This part of the code varies from one camera vendor API to another.
 
 The important part is the creation of ```imageData``` and ```imageDetail``` objects and adding them to the ```image``` as an image part.
 
-The ```ImageData``` constructor takes two parameters, one is the actual image buffer and the second is the size of the buffer. In the ```ImageData``` constructor the buffer is copied and the copied buffer is managed internally.
+The ```ImageData``` constructor takes two parameters: the actual image buffer and the size of the buffer. In the ```ImageData``` constructor, the buffer is copied and the copied buffer is managed internally.
 
-We also need an ```ImageDetail``` object to add the image part to the ```image```. One ```ImageDetail``` object contains the crucial information of given image frame. To such information belong the ```CameraInformation```, ```ImageInformation``` and ```PTPInformation```.
-The ```CameraInformation``` contains the camera unique id and the stream id.
-The ```ImageInformation``` contains the frame count, the width and height of the frame and the pixel format. Although not every camera or use case supports Precision Time Protocol it is required to provide the ```PTPInformation``` for the ```ImageDetail``` object. In this example PTP is not used therefore **```Disabled```** state is used with the value **```0```**.
+We also need an ```ImageDetail``` object to add the image part to the ```image```. One ```ImageDetail``` object contains the crucial information of a given image frame. Such information includes the ```CameraInformation```, ```ImageInformation``` and ```PTPInformation```.
+The ```CameraInformation``` contains the camera unique ID and the stream ID.
+The ```ImageInformation``` contains the frame count, the width and height of the frame, and the pixel format. Although not every camera or use case supports Precision Time Protocol, it is required to provide the ```PTPInformation``` for the ```ImageDetail``` object. In this example, PTP is not used therefore **```Disabled```** state is used with the value **```0```**.
 
-As we have both ```imageData``` and ```imageDetail``` objects we can add them to the ```image``` and we can return it as it has been successfully acquired.
+As we have both ```imageData``` and ```imageDetail``` objects, we can add them to the ```image``` and return it as it has been successfully acquired.
 
-With the current implementation the ```NumbersWithFileLoggerCamera``` can now give use images but only with the same, default configuration. We have to modify the ```getConfig``` and ```setConfig``` methods if we want to change the camera and the acquired images.
+With the current implementation, the ```NumbersWithFileLoggerCamera``` can now give us images but only with the same, default configuration. We have to modify the ```getConfig``` and ```setConfig``` methods if we want to change the camera and the acquired images.
 
-The ```getConfig``` has to return the list of camera supported parameters such as FPS, Width, Height etc... The parameter list varies from one camera to another even in with same brand. With ```getConfig``` the VCA UI can dynamically display the available configuration options of the camera.
+The ```getConfig``` has to return the list of camera supported parameters such as FPS, Width, Height etc. The parameter list varies from one camera to another even within the same brand. With ```getConfig``` the Vision Connector UI can dynamically display the available configuration options of the camera.
 
-The ```setConfig``` has to handle the configuration changes and return a list of changed configuration entries, in our case variables and their chage status.
+The ```setConfig``` has to handle the configuration changes and return a list of changed configuration entries, in our case variables and their change status.
 
 The implementation of ```getConfig``` and ```setConfig``` is the following:
-```
+```cpp
 SDK::v1::CameraParameters NumbersWithFileLoggerCamera::getConfig()
 {
     SDK::v1::CameraParameters cameraParameters;
@@ -268,7 +268,7 @@ SDK::v1::CameraParameters NumbersWithFileLoggerCamera::getConfig()
 }
 ```
 
-```
+```cpp
 SDK::v1::CameraParameterStatuses NumbersWithFileLoggerCamera::setConfig(const SDK::v1::CameraParameters& parametersToChange)
 {
     SDK::v1::CameraParameterStatuses parameterStatuses;
@@ -306,18 +306,18 @@ SDK::v1::CameraParameterStatuses NumbersWithFileLoggerCamera::setConfig(const SD
 }
 ```
 
-Now we can change the camera configuration from the VCA UI while using the camera.
+Now we can change the camera configuration from the Vision Connector UI while using the camera.
 
 ### Adding an internal logger
-As the chosen name of the camera connector suggests it should also have an internal file logger. To do that shall declare a new function ```logToFile``` in the ```NumbersWithFileLoggerPluginLogger.h``` and define it in the ```NumbersWithFileLoggerPluginLogger.cpp```.
+As the chosen name of the camera connector suggests it should also have an internal file logger. To do that we shall declare a new function ```logToFile``` in the ```NumbersWithFileLoggerPluginLogger.h``` and define it in the ```NumbersWithFileLoggerPluginLogger.cpp```.
 
 We add the following to the ```NumbersWithFileLoggerPluginLogger.h```
-```
+```cpp
 void logToFile(VCA::SDK::v1::PluginLogLevel level, const std::string& msg, const std::string& file, int line);
 ```
 
 and to the ```NumbersWithFileLoggerPluginLogger.cpp```
-```
+```cpp
 std::mutex file_mutex;
 void logToFile([[maybe_unused]] VCA::SDK::v1::PluginLogLevel level, const std::string& msg, [[maybe_unused]] const std::string& file, [[maybe_unused]] int line)
 {
@@ -342,10 +342,10 @@ void logToFile([[maybe_unused]] VCA::SDK::v1::PluginLogLevel level, const std::s
 }
 ```
 
-Next we have to register this function with the logger. The most straightforward way to do that is to use the ```NumbersWithFileLoggerConnector``` class' constructor. As the connector is instantiated only once by VCA itself it is safe to use this constructor for initialization of resources or in our case registering the internal logger.
+Next we have to register this function with the logger. The most straightforward way to do that is to use the ```NumbersWithFileLoggerConnector``` class' constructor. As the connector is instantiated only once by Vision Connector itself, it is safe to use this constructor for initialization of resources or in our case registering the internal logger.
 
 Updating the NumbersWithFileLoggerConnector constructor:
-```
+```cpp
 #include "NumbersWithFileLoggerPluginLogger.h"
 ...
 NumbersWithFileLoggerConnector::NumbersWithFileLoggerConnector()
@@ -356,20 +356,20 @@ NumbersWithFileLoggerConnector::NumbersWithFileLoggerConnector()
 ```
 
 ## Testing the connector
-With the scaffolding a test preset is also created. In the IDE we have to switch to the ```numberswithfilelogger-tests``` configuration and build the test application. After this we can run the tests.
+With the scaffolding, a test preset is also created. In the IDE we have to switch to the ```numberswithfilelogger-tests``` configuration and build the test application. After this we can run the tests.
 
 From terminal we have to run these three commands to configure, build and run the tests:
-```
+```bash
 cmake --preset numberswithfilelogger-tests
 cmake --build --preset numberswithfilelogger-tests-build
 ctest --preset numberswithfilelogger-tests
 ```
 
 ## Installing the connector
-When building the custom camera connector with release configuration we can chose **```install```** as the target. The **```install```** target is modified so the library file will be generated in the ```src/installed_drivers/camera_connector_name/``` folder. The ```libVCA-SDK.so``` and the content of the corresponding ```lib``` folder are copied in the same output directory.
+When building the custom camera connector with release configuration we can choose **```install```** as the target. The **```install```** target is modified so the library file will be generated in the ```src/installed_drivers/camera_connector_name/``` folder. The ```libVCA-SDK.so``` and the content of the corresponding ```lib``` folder are copied in the same output directory.
 
 Again, it can be done in the IDE by switching the configuration and building the appropriate target or from the terminal running the corresponding ```build.sh``` script or running these commands directly:
-```
+```bash
 cmake --preset numberswithfilelogger-release
 cmake --build --preset numberswithfilelogger-release-build --target install
 ```
@@ -377,11 +377,11 @@ cmake --build --preset numberswithfilelogger-release-build --target install
 This ensures that the final build has all of its dependencies.
 
 ## Packaging the connector
-When dealing with custom camera connectors Vision Connector Application expects a .zip file containing all of the necessary files without the top-level directory.
+When dealing with custom camera connectors, Vision Connector Application expects a .zip file containing all of the necessary files without the top-level directory.
 
-It can be done using any zip tool but the provided utility scripts are also able to generate the final package file
+It can be done using any zip tool, but the provided utility scripts are also able to generate the final package file.
 
-If the development environment is available use the ```build_drivers.sh``` script otherwise use the ```build_drivers_with_docker``` scripts as they can manage their own temporary development environment.
+If the development environment is available use the ```build_drivers.sh``` script; otherwise use the ```build_drivers_with_docker``` scripts as they can manage their own temporary development environment.
 
 At the end we should have the following folder structure:
 - `installed_drivers/`
@@ -391,12 +391,11 @@ At the end we should have the following folder structure:
         - `libVCA-SDK.so`
     - `numberswithfilelogger.zip`
 
-Now the `numberswithfilelogger.zip` file can be used in VCA.
+Now the `numberswithfilelogger.zip` file can be used in Vision Connector.
 
+## Using the connector in Vision Connector
+In the Vision Connector Grid view we can add our new camera connector through the <b>Manage camera connectors</b> modal.
 
-## Using the connector in VCA
-In the VCA Grid view we can add our new camera connector through the <b>Manage camera connectors</b> modal.
+It is important that the given name must match the name of the custom camera connector library name. In our case, the generated library file is ```libnumberswithfilelogger.so```, so the added connector name must be ```numberswithfilelogger```.
 
-It is important that the given name must match the name of the custom camera connector library name. In our case the generated library file is ```libnumberswithfilelogger.so``` so the added connector name must be ```numberswithfilelogger```
-
-After adding the new connector from the UI the application will initialize it in 10 seconds. After that the <b>Add camera</b> modal will list the new connector as well as the list of colors as discovered cameras.
+After adding the new connector from the UI, the application will initialize it in 10 seconds. After that, the <b>Add camera</b> modal will list the new connector as well as the list of colors as discovered cameras.

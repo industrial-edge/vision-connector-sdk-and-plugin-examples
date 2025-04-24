@@ -19,51 +19,47 @@
 
 ### Overview
 
-The Industrial Edge Vision Connector App, or VCA for short combines industrial cameras with the Industrial Edge ecosystem. The Vision Connector uses an Ethernet interface to establish a connection to the cameras. The VCA publishes the data using the ZeroMQ server integrated in the Vision Connector with high throughput to other applications.
-
-As of version 1.2.0 it is possible to integrate any camera vendor's C++ API with simple implementation steps through custom camera connectors for VCA. 
+The Industrial Edge Vision Connector combines industrial cameras with the Industrial Edge ecosystem through an Ethernet interface. It publishes camera data using an integrated ZeroMQ server, enabling high-throughput communication with other applications. Starting with version 1.2.0, the Vision Connector supports integration of any camera vendor's C++ API through custom camera connectors.
 
 ### General Task
-This project was created to introduce you to the Vision Connector drivers feature and to help the creation of custom camera connectors.
+This project provides guidance for implementing the Vision Connector drivers feature and assists in the creation of custom camera connectors.
 
 ## Requirements
 
 ### Prerequisites
-To develop a custom camera connector, the developer should meet the following requirements:
-- Familiarity with the Vision Connector application and its features.
-- Understanding of the VCA SDK, including structure and usage.
-- Working knowledge of C++ and build tools such as CMake
-- A properly set up development environment aligned with the project requirements.
-- Access to the camera vendor's API documentation.
-- Availability of the camera vendor's C++ headers and libraries required for teh integration.
+To develop a custom camera connector, the following requirements must be met:
+- Experience with Vision Connector application and its features
+- Proficiency in C++ programming and CMake build system
+- Understanding of the Vision Connector SDK (v1.0.0)
+- Development environment meeting project specifications
+- Access to and understanding of camera vendor's API documentation
+- Camera vendor's C++ headers and libraries for integration
 
 ### Used components
 - Vision Connector V1.2.0
-- VCA SDK V1.0.0
+- Vision Connector SDK V1.0.0
 
 ## Installation
-To build and prepeare your camera connector to use in VCA we are providing utility scripts. For more information please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
+To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
 
 ## Usage
-To use a custom camera connector in VCA first you will need to prepare the corresponding package file. When the package file is prepared you can upload it in VCA thus adding your camera connector to the application in a few sinmple steps.
+To use a custom camera connector in Vision Connector, you first need to prepare the corresponding package file. Once prepared, you can upload it to Vision Connector, adding your camera connector to the application in a few simple steps.
 
-For the usage step-by-step guide please refer to the [Using the connector in VCA](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section.
+For the step-by-step usage guide, please refer to the [Using the connector in Vision Connector](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section.
 
 ## Documentation
 
-To get familiar with the Vision Connector Drivers project please read the provided documentation
+### Core Documentation
+* [Repository Overview](docs/repository_overview.md)
+* [Development Environment Setup](docs/development_environment.md)
+* [Vision Connector SDK Guide](docs/vca_sdk.md)
+* [Custom Camera Connector Guide](docs/creating_and_using_a_custom_camera_connector.md)
 
-* [Repository overview](docs/repository_overview.md)
-* [How to setup the development environment](docs/development_environment.md)
-* [Introduction to VCA SDK](docs/vca_sdk.md)
-* [Creating and using a custom camera connector](docs/creating_and_using_a_custom_camera_connector.md)
-
-You can find further documentation and help in the following links
-
+### Additional Resources
 * [Industrial Edge Hub](https://iehub.eu1.edge.siemens.cloud/#/documentation)
 * [Industrial Edge Forum](https://www.siemens.com/industrial-edge-forum)
-* [Industrial Edge landing page](https://new.siemens.com/global/en/products/automation/topic-areas/industrial-edge/simatic-edge.html)
-* [Industrial Edge GitHub page](https://github.com/industrial-edge)
+* [Industrial Edge Landing Page](https://new.siemens.com/global/en/products/automation/topic-areas/industrial-edge/simatic-edge.html)
+* [Industrial Edge GitHub](https://github.com/industrial-edge)
 * [Industrial Edge Learning Path](https://siemens-learning-simaticedge.sabacloud.com)
 
 ## Contribution

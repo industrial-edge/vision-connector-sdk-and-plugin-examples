@@ -1,4 +1,4 @@
-# VCA SDK
+# Vision Connector SDK
 
 ## Table of Contents
 * **[Overview](#overview)**
@@ -18,43 +18,41 @@
         * **[Locking policy](#locking-policy)**
 
 ## Overview
-The VCA SDK is a separately built library which allows users to create their own camera connectors and use them with VCA. The VCA Drivers repository contains a pre-built version of this SDK with the necessary header files under the ```sdk``` folder. Every custom camera connector package has to contain the ```libVCA-SDK.so``` and the custom camera conenctor library has to link to this .so file.
+The Vision Connector SDK is a separately built library that enables users to create custom camera connectors for use with Vision Connector. The Vision Connector Drivers repository contains a pre-built version of this SDK with necessary header files under the ```sdk``` folder. Every custom camera connector package must include ```libVCA-SDK.so```, and the custom camera connector library must link to this .so file.
 
-By default the custom camera connector package creation and linkage is handled by CMake configuration and build scripts. More information about this in the [Creating and using a custom camera connector](creating_and_using_a_custom_camera_connector.md) section.
+By default, CMake configuration and build scripts handle the custom camera connector package creation and linkage. For more information, see the [Creating and using a custom camera connector](creating_and_using_a_custom_camera_connector.md) section.
 
 ## Classes
 ### PluginLogger class
-The SDK provides logging capabilities through the ```PluginLogger``` class. The ```PluginLogger``` can store registered callbacks with the actual logging implementation. VCA uses this concept to register its own logging logic but the camera connector can also register its own logging callback if needed.
-If there is no registered callback then a fallback logger is used which writes to the standard output.
+The SDK provides logging capabilities through the ```PluginLogger``` class. The ```PluginLogger``` can store registered callbacks with the actual logging implementation. Vision Connector uses this concept to register its own logging logic, but camera connectors can also register their own logging callbacks if needed.
+If no callback is registered, a fallback logger writes to the standard output.
 
-While the ```PluginLogger``` provides instance based macros for the different log levels it is not recommended to use them on their own. Each camera connector has its own ```PluginLogger``` instance and its specific log macros. Use these specific macros.
-
+While the ```PluginLogger``` provides instance-based macros for different log levels, it's recommended to use the specific log macros provided by each camera connector's ```PluginLogger``` instance.
 
 ### Object and ObjectContainer classes
-The SDK contains some utility classes such as the ```Object``` and the ```ObjectContainer```. These classes provide a generalized way to handle data between the custom camera connector and the VCA application and are not used individually.
+The SDK includes utility classes such as ```Object``` and ```ObjectContainer```. These classes provide a generalized way to handle data between the custom camera connector and the Vision Connector application and are not used individually.
 
-*Essentially the Object represents a JSON object.*
+*Essentially, the Object represents a JSON object.*
 
 ### CameraStatus class
-Extends the ```ObjectContainer``` class to handle specificated data for camera status. It is used in the ```Camera``` abstract class.
+Extends the ```ObjectContainer``` class to handle specified data for camera status. It is used in the ```Camera``` abstract class.
 
 ### CameraParameter class
-Extends the ```ObjectContainer``` class to handle specificated data for camera parameters.
+Extends the ```ObjectContainer``` class to handle specified data for camera parameters.
 
-The camera parameter can have the following fields:
+Camera parameters can have the following fields:
 
- - **```Name```** - The name of the parameter
- - **```Description```** - Description for the parameter
- - **```Value```** - Value of the parameter
- - **```Min```** - Minimum value of the parameter (if applicable)
- - **```Max```** - Maximum value of the parameter (if applicable)
+ - **```Name```** - Parameter name
+ - **```Description```** - Parameter description
+ - **```Value```** - Parameter value
+ - **```Min```** - Minimum value (if applicable)
+ - **```Max```** - Maximum value (if applicable)
  - **```Increment```** - Expected value increment (if applicable)
  - **```Symbolics```** - Predefined value options (if applicable)
- - **```Type```** - Type of the parameter
- - **```ReadOnly```** - Accessibility of the parameter
+ - **```Type```** - Parameter type
+ - **```ReadOnly```** - Parameter accessibility
 
-
-The camera parameter handles each field as string independent from the original value data type. The original data type is defined by the ```type``` field:
+The camera parameter handles each field as a string, independent of the original value data type. The original data type is defined by the ```type``` field:
  - ```bool```
  - ```int```
  - ```float```
@@ -62,79 +60,78 @@ The camera parameter handles each field as string independent from the original 
  - ```enum```
 
 ### CameraParameterStatus class
-Extends the ObjectContainer class to handle specificated data for camera parameter changes.
+Extends the ObjectContainer class to handle specified data for camera parameter changes.
 
-Depending on the success of the parameter change the status can be either **```OK```** or **```ERROR```**.
-If the status is **```OK```** then the value is the changed parameter value otherwise the error message.
+The status can be either **```OK```** or **```ERROR```** depending on the parameter change success.
+For **```OK```** status, the value is the changed parameter value; for **```ERROR```**, it's the error message.
 
 ### Image class
-The ```Image``` class is responsible for managing the image data retrieved from the cameras. VCA supports multipart images. An instance of the ```Image``` class consist of no, one or more image parts. By default the image instance does not contain any image part. The ```Image``` instance does not take over of the ownership of added image parts.
+The ```Image``` class manages image data retrieved from cameras. Vision Connector supports multipart images. An ```Image``` class instance can contain zero, one, or more image parts. By default, the image instance contains no image parts and doesn't take ownership of added image parts.
 
-It is also possible to add metadata to each image part and custom fields to the image instance itself.
+Image parts can include metadata, and custom fields can be added to the image instance itself.
 
 ### CameraException
-Custom exception for camera related errors
+Custom exception for camera-related errors.
 
 ## Abstract Classes
-The actual behaviour of the custom camera connector is defined by the re-implementation of the ```CameraConnector``` and ```Camera``` abstract classes.
+The custom camera connector's behavior is defined by reimplementing the ```CameraConnector``` and ```Camera``` abstract classes.
 
 ### CameraConnector class
-This class is responsible for the discovery of corresponding cameras and the unique ID specific camera creation. The unique ID is a special identifier of the cameras and is used for connection.
+Responsible for discovering corresponding cameras and creating unique ID-specific cameras. The unique ID is a special camera identifier used for connection.
 
 #### Virtual methods
  - **```discover```**<br>
-The ```discover``` method has to return the list of available cameras as unique IDs.
+Returns the list of available cameras as unique IDs.
 
 </br>
 
  - **```createCamera```**<br>
-The ```createCamera``` method has to create an instance of the unique ID specified camera and returns it as shared pointer.
+Creates an instance of the specified unique ID camera and returns it as a shared pointer.
 
 ### Camera class
-This class is responsible for managing the underlying  camera (handling connection, modifying settings, retriving images). An instance of the ```Camera``` class can represent either a real/physical camera on the network or a simulated/software device.
+Manages the underlying camera (handles connection, modifies settings, retrieves images). A ```Camera``` class instance can represent either a physical camera on the network or a simulated/software device.
 
-A camera instance has to be created through the ```CameraConnector``` specified by the unique ID.
+Camera instances must be created through the ```CameraConnector``` specified by the unique ID.
 
 #### Virtual methods
  - **```startImageAcquisition```**<br>
-Has to handle connection to the underlying camera and prepare it for image acqusition.
+Handles connection to the underlying camera and prepares it for image acquisition.
 
 </br>
 
  - **```stopImageAcquisition```**<br>
-Has to handle the disconnection of the underlying camera and free resource access.
+Handles underlying camera disconnection and frees resource access.
 
 </br>
 
  - **```getStatus```**<br>
-Has to return ```ONLINE``` or ```OFFLINE``` depending on the actual connection to the underlying camera and the state of the image retrieval.
+Returns ```ONLINE``` or ```OFFLINE``` based on the actual connection to the underlying camera and image retrieval state.
 
 </br>
 
  - **```acquireImage```**<br>
-Main logic for retrieving images from the actual camera. This method is called by higher level components on a separate thread. To avoid race condition resource access management is handled internally.
-Has to return an instance of ```Image``` as shared pointer.
+Implements main logic for retrieving images from the actual camera. Called by higher-level components on a separate thread. Internal resource access management prevents race conditions.
+Returns an ```Image``` instance as shared pointer.
 
 </br>
 
  - **```getConfig```**<br>
-Retrieves the actual configuration of the underlying camera. This method is called by higher level components on a separate thread. To avoid race condition resource access management is handled internally.
-Has to return the list ```CameraParameters```.
+Retrieves the underlying camera's actual configuration. Called by higher-level components on a separate thread. Internal resource access management prevents race conditions.
+Returns the ```CameraParameters``` list.
 
 </br>
 
  - **```setConfig```**<br>
-Changes the configuration of the camera according to the parameter given CameraParameters. A CameraParameterStatus belongs to each changed camera parameter. To avoid race condition resource access management is handled internally.
-Has to return the list ```CameraParameterStatuses```.
+Changes camera configuration according to given CameraParameters. Associates a CameraParameterStatus with each changed parameter. Internal resource access management prevents race conditions.
+Returns the ```CameraParameterStatuses``` list.
 
 </br>
 
  - **```setVersion```**<br>
-Sets the camera connector's internal version which then becomes part of the camera configuration. Default value: <b>Not Defined</b>
-
+Sets the camera connector's internal version, which becomes part of the camera configuration. Default value: <b>Not Defined</b>
 
 #### Locking policy
-The Camera class ensures thread safe access to the underlying camera device. This is done by synchronizing the ```acquireImage```, ```getConfig```, ```setConfig```, ```startImageAcquisition``` and ```startImageAcquisition``` methods through the ```m_cameraAccessMutex``` mutex. The ```m_cameraAccessMutex``` MUST NOT be used in custom camera class implementation.
+The Camera class ensures thread-safe access to the underlying camera device by synchronizing ```acquireImage```, ```getConfig```, ```setConfig```, ```startImageAcquisition```, and ```stopImageAcquisition``` methods through the ```m_cameraAccessMutex``` mutex. The ```m_cameraAccessMutex``` MUST NOT be used in custom camera class implementation.
 <br>
 
-To ensure the responsivity of the camera the implementation of ```acquireImage```, ```getConfig```, ```setConfig```, ```startImageAcquisition``` and ```stopImageAcquisition``` methods MUST NOT contain active blocking logic.
+To ensure camera responsiveness, implementations of ```acquireImage```, ```getConfig```, ```setConfig```, ```startImageAcquisition```, and ```stopImageAcquisition``` methods MUST NOT contain active blocking logic.
