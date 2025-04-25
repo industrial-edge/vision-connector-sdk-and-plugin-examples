@@ -19,16 +19,16 @@
 
 ### Overview
 
-The Industrial Edge Vision Connector combines industrial cameras with the Industrial Edge ecosystem through an Ethernet interface. It publishes camera data using an integrated ZeroMQ server, enabling high-throughput communication with other applications. Starting with version 1.2.0, the Vision Connector supports integration of any camera vendor's C++ API through custom camera connectors.
+The Industrial Edge Vision Connector combines industrial cameras with the Industrial Edge ecosystem through an Ethernet interface. It publishes camera data using an integrated ZeroMQ server, enabling high-throughput communication with other applications. Starting with version 1.2.0, the Vision Connector provides feature for importing customer camera connectors into the application for connecting and acquiring images from additional Camera vendors (using camera vendors C++ API) or remote endpoints (such as FTP or cloud storage) which are not supported natively by the Vision Connector. This documentation provides guidance, instructions, and exmaple for creating such custom camera connectors. 
 
 ### General Task
-This project provides guidance for implementing the Vision Connector drivers feature and assists in the creation of custom camera connectors.
+This project provides guidance for implementing the Vision Connector drivers feature and assists in the creation of custom camera connectors. 
 
 ## Requirements
 
 ### Prerequisites
-To develop a custom camera connector, the following requirements must be met:
-- Experience with Vision Connector application and its features
+To develop a custom camera connector, the following Prerequisites are required:
+- Experience with Siemens Vision Connector application and its features
 - Proficiency in C++ programming and CMake build system
 - Understanding of the Vision Connector SDK (v1.0.0)
 - Development environment meeting project specifications
