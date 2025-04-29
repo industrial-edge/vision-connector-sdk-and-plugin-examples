@@ -7,8 +7,8 @@ To ease the environment setup process, the installation scripts from the ```requ
 
 Add the following lines to the ```~/.bashrc``` file to use the modified environment variables globally:
 ```bash
-export LIBRARY_PATH="/usr/local/lib/:/Pylon/lib/":${LIBRARY_PATH}
-export LD_LIBRARY_PATH="/usr/local/lib/:/Pylon/lib/":${LD_LIBRARY_PATH}
+export LIBRARY_PATH="/usr/local/lib/":${LIBRARY_PATH}
+export LD_LIBRARY_PATH="/usr/local/lib/":${LD_LIBRARY_PATH}
 export PATH=/cmake-3.21.7-linux-x86_64/bin/:${PATH}
 ```
 

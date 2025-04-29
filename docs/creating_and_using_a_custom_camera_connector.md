@@ -308,15 +308,15 @@ SDK::v1::CameraParameterStatuses NumbersWithFileLoggerCamera::setConfig(const SD
 
 Now we can change the camera configuration from the Vision Connector UI while using the camera.
 
-### Adding an internal logger
-As the chosen name of the camera connector suggests it should also have an internal file logger. To do that we shall declare a new function ```logToFile``` in the ```NumbersWithFileLoggerPluginLogger.h``` and define it in the ```NumbersWithFileLoggerPluginLogger.cpp```.
+### Adding an internal logger (Optional)
+Custom logging can be added to the plugin if its needed/desired. As the chosen name of the camera connector suggests it should also have an internal file logger. To do that we shall declare a new function ```logToFile``` in the ```NumbersWithFileLoggerPluginLogger.h``` and define it in the ```NumbersWithFileLoggerPluginLogger.cpp```.
 
 We add the following to the ```NumbersWithFileLoggerPluginLogger.h```
 ```cpp
 void logToFile(VCA::SDK::v1::PluginLogLevel level, const std::string& msg, const std::string& file, int line);
 ```
 
-and to the ```NumbersWithFileLoggerPluginLogger.cpp```
+Create and add to the ```NumbersWithFileLoggerPluginLogger.cpp```
 ```cpp
 std::mutex file_mutex;
 void logToFile([[maybe_unused]] VCA::SDK::v1::PluginLogLevel level, const std::string& msg, [[maybe_unused]] const std::string& file, [[maybe_unused]] int line)
