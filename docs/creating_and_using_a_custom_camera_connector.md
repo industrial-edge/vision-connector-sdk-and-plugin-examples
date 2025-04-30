@@ -17,15 +17,19 @@
 ## Overview
 In this walkthrough we will create an OpenCV based camera connector called ```NumbersWithFileLogger``` and load it into Vision Connector. The cameras of this camera connector will give us colored images with increasing numbers written on them. As the name suggests we shall also implement our own logging logic as part of the camera connector.
 
-The following guide assumes that the development environment is set up, CMake is used as build tool and VSCode as IDE. It is important to set the working directory to the ```src``` folder located in the repository root.
+The following guide assumes that the development environment is set up, CMake is used as build tool and VSCode as IDE. To setup the development environment please follow the instructions of the [Development Environment Setup](development_environment.md) documentation.
+
+It is important to set the working directory to the ```src``` folder located in the repository root.
 
 ## Creating the connector
 ### Scaffolding
 Navigate to the ```src``` folder of the Vision Connector Drivers repository.
 First we need the skeleton of the new camera connector. For that we shall use the ```scaffolding``` script:
+```bash
+sudo ./scaffolding.sh NumbersWithFileLogger
 ```
-./scaffolding.sh NumbersWithFileLogger
-```
+Please note that the scaffolding requires root permission.
+
 After running the script we should have the ```CMakeLists.txt``` and ```CMakePresets.json``` updated in the ```src``` folder with the new configuration and the ```src/drivers/numberswithfilelogger``` folder created with the following structure:
 
 - `drivers/`
@@ -52,13 +56,13 @@ After running the script we should have the ```CMakeLists.txt``` and ```CMakePre
 In this step we should copy every camera vendor provided header file in the include folder and library file in the lib folder. The header files are included automatically but the camera connector's ```CMakeLists.txt``` file has to be modified by hand to link the necessary 3rd-party libraries.
 
 In our example we won't use these two folders but the ```CMakeLists.txt``` file has to be updated so the camera connector can use OpenCV. We add/modify the following lines:
-```
+```cmake
 find_package(OpenCV REQUIRED)
 target_link_libraries(${LIBRARY_NAME} PRIVATE opencv_core opencv_videoio ${LIBS})
 ```
 
 The modified CMakeLists.txt file looks like this in the affected areas:
-```
+```cmake
 ...
 include_directories(${SDK_INCLUDE_DIR})
 link_directories(${SDK_LIBRARY_DIR})
@@ -72,7 +76,7 @@ if(TESTING STREQUAL "ON")
 endif()
 ...
 ```
-```
+```cmake
 ...
 add_library(${LIBRARY_NAME} SHARED ${PROJECT_SOURCES})
 
@@ -112,7 +116,7 @@ The ```CameraConnector``` class is responsible for discovering and creating came
 In this example we shall modify the ```discover``` method so it returns a list of colors as unique IDs for the possible cameras.
 
 Modified code:
-```
+```cpp
 std::vector<std::string> NumbersWithFileLoggerConnector::discover() const
 {
     return {"red", "green", "blue", "black"};
@@ -134,6 +138,10 @@ private:
     int m_thickness = 2;
     int m_baseline = 0;
     int m_fps = 1;
+```
+As we are using OpenCV we have to include the appropriate header file as well in NumbersWithFileLoggerCamera.h:
+```cpp
+#include <opencv2/opencv.hpp>
 ```
 
 With these variables we are defining a default state for the cameras and we are also able to change the behavior of the cameras at runtime.
@@ -196,6 +204,12 @@ std::shared_ptr<VCA::SDK::v1::Image> NumbersWithFileLoggerCamera::acquireImage()
     return image;
 }
 ```
+
+The implementation of ```acquireImage``` uses threading so the
+```cpp
+#include <thread>
+```
+line has to be added to the include section at the top of the file.
 
 With the exception of ```increaseImageSequenceCounter();``` which we use to update the displayed counter up until ```auto image = std::make_shared<SDK::v1::Image>();```, everything is OpenCV specific code. This part of the code varies from one camera vendor API to another.
 
@@ -311,35 +325,48 @@ Now we can change the camera configuration from the Vision Connector UI while us
 ### Adding an internal logger (Optional)
 Custom logging can be added to the plugin if its needed/desired. As the chosen name of the camera connector suggests it should also have an internal file logger. To do that we shall declare a new function ```logToFile``` in the ```NumbersWithFileLoggerPluginLogger.h``` and define it in the ```NumbersWithFileLoggerPluginLogger.cpp```.
 
-We add the following to the ```NumbersWithFileLoggerPluginLogger.h```
+We add the following to the ```NumbersWithFileLoggerPluginLogger.h``` inside the ```VCA::NumbersWithFileLogger``` namespace
+
 ```cpp
 void logToFile(VCA::SDK::v1::PluginLogLevel level, const std::string& msg, const std::string& file, int line);
 ```
 
 Create and add to the ```NumbersWithFileLoggerPluginLogger.cpp```
 ```cpp
-std::mutex file_mutex;
-void logToFile([[maybe_unused]] VCA::SDK::v1::PluginLogLevel level, const std::string& msg, [[maybe_unused]] const std::string& file, [[maybe_unused]] int line)
+#include "NumbersWithFileLoggerPluginLogger.h"
+
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <mutex>
+
+namespace fs = std::filesystem;
+
+namespace VCA::NumbersWithFileLogger
 {
-    try
+    std::mutex file_mutex;
+    void logToFile([[maybe_unused]] VCA::SDK::v1::PluginLogLevel level, const std::string& msg,
+                   [[maybe_unused]] const std::string& file, [[maybe_unused]] int line)
     {
-        const std::lock_guard<std::mutex> lock(file_mutex);
-        const auto filePath = "/logs/numbers_with_file_logger.txt";
-        fs::create_directories(fs::path(filePath).parent_path());
-
-        std::ofstream file(filePath, std::ios::app);
-        if (!file)
+        try
         {
-            throw std::ios_base::failure("Failed to open log file");
-        }
+            const auto filePath = "/logs/numbers_with_file_logger.txt";
+            fs::create_directories(fs::path(filePath).parent_path());
 
-        file << msg << std::endl;
+            std::ofstream file(filePath, std::ios::app);
+            if (!file)
+            {
+                throw std::ios_base::failure("Failed to open log file");
+            }
+
+            file << msg << std::endl;
+        }
+        catch (const std::exception& ex)
+        {
+            std::cout << "Error: " << ex.what() << std::endl;
+        }
     }
-    catch (const std::exception& ex)
-    {
-        std::cout << "Error: " << ex.what() << std::endl;
-    }
-}
+} // namespace VCA::NumbersWithFileLogger
 ```
 
 Next we have to register this function with the logger. The most straightforward way to do that is to use the ```NumbersWithFileLoggerConnector``` class' constructor. As the connector is instantiated only once by Vision Connector itself, it is safe to use this constructor for initialization of resources or in our case registering the internal logger.
@@ -355,8 +382,18 @@ NumbersWithFileLoggerConnector::NumbersWithFileLoggerConnector()
 }
 ```
 
+As we added actual implementation to the constructor we have to change its declaration in the NumbersWithFileLoggerConnector.h file:
+```cpp
+explicit NumbersWithFileLoggerConnector();
+```
+
 ## Testing the connector
 With the scaffolding, a test preset is also created. In the IDE we have to switch to the ```numberswithfilelogger-tests``` configuration and build the test application. After this we can run the tests.
+
+For the test configuration there is a dedicated ```CMakeLists.txt``` file in the tests folder. This file has to be updated with the library linkage as we are depending on OpenCV. ```opencv_core``` and ```opencv_videoio``` have to be added to the ```LIBS``` list.
+```cmake
+set(LIBS VCA-SDK opencv_core opencv_videoio ${LIBS})
+```
 
 From terminal we have to run these three commands to configure, build and run the tests:
 ```bash

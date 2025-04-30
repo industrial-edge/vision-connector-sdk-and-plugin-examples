@@ -36,6 +36,7 @@ To create a custom camera connector, ensure the following prerequisites are met:
 - Camera vendor's C++ headers and libraries for integration
 
 ### Used components
+- Debian 11
 - Vision Connector V1.2.0
 - Vision Connector SDK V1.0.0
 

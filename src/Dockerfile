@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=debian:bullseye-20221219-slim
-ARG COMMON_PATH="/cmake-3.21.7-linux-x86_64/bin/:/clangd_language_server/clangd_16.0.2/bin/"
+ARG COMMON_PATH="/clangd_language_server/clangd_16.0.2/bin/"
 ARG COMMON_LIB_PATH="/usr/local/lib/"
 
 
