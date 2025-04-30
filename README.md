@@ -42,8 +42,10 @@ To create a custom camera connector, ensure the following prerequisites are met:
 ## Installation
 To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. Users should use the scripts in `src/requirements` to install prerequisite packages. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
 
-## Step-by-Step Guide to building a connector
-To use a custom camera connector in Vision Connector, you first need to prepare the corresponding package file. Once prepared, you can upload it to Vision Connector, adding your camera connector to the application in a few simple steps.
+## Step-by-Step guide to building a connector
+To use a custom camera connector in Vision Connector, you first need to prepare the corresponding package file. Once prepared, you can upload it to Vision Connector.
+
+The following steps elaborate on preparing a package using the Vision Connector SDK and OpenCV as an example. However, users can adapt the process to suit their specific camera SDK or desired remote endpoint requirements.
 
 1. **Prepare the Development Environment**  
     Ensure all prerequisites are installed and the development environment is set up as described in the [Development Environment Setup](docs/development_environment.md) section.
