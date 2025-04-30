@@ -27,7 +27,7 @@ This project provides guidance for implementing the Vision Connector drivers fea
 ## Requirements
 
 ### Prerequisites
-To develop a custom camera connector, the following Prerequisites are required:
+To create a custom camera connector, ensure the following prerequisites are met:
 - Experience with Siemens Vision Connector application and its features
 - Proficiency in C++ programming and CMake build system
 - Understanding of the Vision Connector SDK (v1.0.0)
@@ -40,12 +40,36 @@ To develop a custom camera connector, the following Prerequisites are required:
 - Vision Connector SDK V1.0.0
 
 ## Installation
-To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
+To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. Users should use the scripts in `src/requirements` to install prerequisite packages. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
 
-## Usage
+## Step-by-Step Guide to building a connector
 To use a custom camera connector in Vision Connector, you first need to prepare the corresponding package file. Once prepared, you can upload it to Vision Connector, adding your camera connector to the application in a few simple steps.
 
-For the step-by-step usage guide, please refer to the [Using the connector in Vision Connector](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section.
+1. **Prepare the Development Environment**  
+    Ensure all prerequisites are installed and the development environment is set up as described in the [Development Environment Setup](docs/development_environment.md) section.
+
+2. **Understand the Vision Connector SDK**  
+    Familiarize yourself with the Vision Connector SDK by reviewing the [Vision Connector SDK Guide](docs/vca_sdk.md).
+
+3. **Create the Custom Camera Connector**  
+    - Use the provided SDK and follow the [Custom Camera Connector Guide](docs/creating_and_using_a_custom_camera_connector.md) to implement your connector.
+    - Integrate the camera vendor's API and ensure compatibility with the Vision Connector.
+
+4. **Build the Connector**  
+    - Use the utility scripts in `src/requirements` to install necessary dependencies.
+    - Follow the instructions in the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) section to build the connector.
+
+5. **Package the Connector**  
+    - Package the connector as described in the [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) section.
+
+6. **Upload the Connector**  
+    - Access the Vision Connector application and upload the packaged connector file.
+    - Follow the steps in the [Using the connector in Vision Connector](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section to complete the process.
+
+7. **Test the Connector**  
+    - Verify the functionality of the custom camera connector by testing it with the Vision Connector application.
+    - Debug and refine as necessary to ensure optimal performance.
+
 
 ## Documentation
 

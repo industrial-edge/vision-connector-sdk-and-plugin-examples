@@ -1,6 +1,6 @@
 # Development environment
 
-## Setup environment
+## Setup environment and conveinence scripts
 All Industrial Edge applications run on Linux-based OS. Development on Windows or MacOS is also supported, but the build needs to be made in a Linux environment. Although there is no specific restriction regarding the developer tools, since the ```scaffolding``` and ```build``` scripts heavily utilize ```CMake``` and its presets, it is recommended to use them as well.
 
 To ease the environment setup process, the installation scripts from the ```requirements``` folder can be used. Depending on the selected development environment, the PATH, LIBRARY_PATH, and LD_LIBRARY_PATH environment variables might need to be updated according to the ```Dockerfile``` ```COMMON_PATH``` and ```COMMON_LIB_PATH``` args.
@@ -11,9 +11,12 @@ export LIBRARY_PATH="/usr/local/lib/":${LIBRARY_PATH}
 export LD_LIBRARY_PATH="/usr/local/lib/":${LD_LIBRARY_PATH}
 export PATH=/cmake-3.21.7-linux-x86_64/bin/:${PATH}
 ```
-
-Use the ```install_build_requirements.sh``` and ```install_test_requirements.sh``` scripts to get the general build and test tools. If the custom camera connector needs OpenCV support, install it with ```install_opencv.sh```.
-
+The following convience scripts are provieded in src/requirements for installing the general build tools, test tools, and OpenCV.
+```
+install_build_requirements.sh
+install_test_requirements.sh
+install_opencv.sh
+```
 ## Verify environment
 To verify that the development environment was set up correctly, run the tests of the ```Daheng``` camera connector example.
 
