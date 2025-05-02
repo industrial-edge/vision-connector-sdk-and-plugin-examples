@@ -41,7 +41,9 @@ To create a custom camera connector, ensure the following prerequisites are met:
 - Vision Connector SDK V1.0.0
 
 ## Installation
-To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. Users should use the scripts in `src/requirements` to install prerequisite packages. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
+To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. The development environment requires Debian 11 (bullseye); if you're using a different operating system, it's strongly recommended to use the Docker container approach instead. For users with Debian 11, the scripts in `src/requirements` can be used to install prerequisite packages. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
+
+Here's the revised section with a note about skipping step 1 when using Docker:
 
 ## Step-by-Step guide to building a connector
 To use a custom camera connector in Vision Connector, you first need to prepare the corresponding package file. Once prepared, you can upload it to Vision Connector.
@@ -49,7 +51,9 @@ To use a custom camera connector in Vision Connector, you first need to prepare 
 The following steps elaborate on preparing a package using the Vision Connector SDK and OpenCV as an example. However, users can adapt the process to suit their specific camera SDK or desired remote endpoint requirements.
 
 1. **Prepare the Development Environment**  
-    Ensure all prerequisites are installed and the development environment is set up as described in the [Development Environment Setup](docs/development_environment.md) section.
+    > **Note:** Skip this step if you're using the Docker container approach for building.
+    
+    If building locally, ensure all prerequisites are installed and the development environment is set up as described in the [Development Environment Setup](docs/development_environment.md) section.
 
 2. **Understand the Vision Connector SDK**  
     Familiarize yourself with the Vision Connector SDK by reviewing the [Vision Connector SDK Guide](docs/vca_sdk.md).
@@ -59,8 +63,8 @@ The following steps elaborate on preparing a package using the Vision Connector 
     - Integrate the camera vendor's API and ensure compatibility with the Vision Connector.
 
 4. **Build the Connector**  
-    - Use the utility scripts in `src/requirements` to install necessary dependencies.
-    - Follow the instructions in the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) section to build the connector.
+    - For local build: Use the utility scripts in `src/requirements` to install necessary dependencies.
+    - Follow the instructions in the [Preparing Package Structure and Installation](docs/creating_and_using_a_custom_camera_connector.md#preparing-package-structure-and-installation) section to build the connector.
 
 5. **Package the Connector**  
     - Package the connector as described in the [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) section.
@@ -72,7 +76,6 @@ The following steps elaborate on preparing a package using the Vision Connector 
 7. **Test the Connector**  
     - Verify the functionality of the custom camera connector by testing it with the Vision Connector application.
     - Debug and refine as necessary to ensure optimal performance.
-
 
 ## Documentation
 

@@ -30,19 +30,19 @@ Running the script creates a new folder in the drivers folder with the given nam
 
 For example, running:
 ```bash
-./scaffolding.sh MyCam
+./scaffolding.sh MyCamImplementation
 ```
 
 Results in:
-- Creation of ```mycam``` folder under ```drivers```
-- Source filenames starting with ```MyCam``` prefix
-- Camera connector related classes with ```MyCam``` prefix
+- Creation of ```**MyCamImplementation**``` folder under ```drivers```
+- Source filenames starting with ```MyCamImplementation``` prefix
+- Camera connector related classes with ```MyCamImplementation``` prefix
 - Empty ```lib``` and ```include``` folders for vendor files
-- Updated ```CMakeLists.txt``` with ```mycam``` project and library
-- Added ```build.sh``` script with ```MyCam``` build and install commands
-- Updated root ```CMakePresets.json``` and ```CMakeLists.txt``` with new ```MyCam``` camera connector configurations
+- Updated ```CMakeLists.txt``` with ```MyCamImplementation``` project and library
+- Added ```build.sh``` script with ```MyCamImplementation``` build and install commands
+- Updated root ```CMakePresets.json``` and ```CMakeLists.txt``` with new ```MyCamImplementation``` camera connector configurations
 
-<b>Note: ```MyCam``` and ```mycam``` are intentionally used separately. Vision Connector restricts the camera connector naming convention - the library file and connector name must contain only lowercase letters. The script handles this naming convention automatically.</b>
+<b>Note: ```MyCamImplementation``` and ```MyCamImplementation``` are intentionally used separately. Vision Connector restricts the camera connector naming convention - the library file and connector name must contain only lowercase letters. The script handles this naming convention automatically.</b>
 
 ## build_drivers script
 With a configured development environment, available camera connectors in the drivers folder can be built from source using the build_drivers script. This script builds the release version of connectors and packages them ready for use in Vision Connector.
@@ -55,5 +55,5 @@ Important: Scripts provided by the Vision Connector Drivers repository may requi
 
 ```bash
 chmod 777 scaffolding.sh
-sudo ./scaffolding.sh MyCam
+sudo ./scaffolding.sh MyCamImplementation
 ```

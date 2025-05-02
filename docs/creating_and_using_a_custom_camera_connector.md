@@ -10,7 +10,7 @@
     * **[Implementing NumbersWithFileLoggerCamera class](#implementing-numberswithfileloggercamera-class)**
     * **[Adding an internal logger](#adding-an-internal-logger)**
 * **[Testing the connector](#testing-the-connector)**
-* **[Installing the connector](#installing-the-connector)**
+* **[Preparing Package Structure and Installation](#preparing-package-structure-and-installation)**
 * **[Packaging the connector](#packaging-the-connector)**
 * **[Using the connector in Vision Connector](#using-the-connector-in-vision-connector)**
 
@@ -90,21 +90,21 @@ Refer to the ```CMakeLists.txt``` files of the examples to get more insights on 
 
 ### Configure and build new custom camera connector
 After the ```scaffolding```, new configuration and build presets are available. To continue the development of the camera connector we have to configure our new project. This can be done from the IDE or from the terminal by running one of these commands:
-```
+```bash
 cmake --preset numberswithfilelogger-debug
 ```
 or
-```
+```bash
 cmake --preset numberswithfilelogger-release
 ```
 depending on which build type is required.
 
 Although the current ```NumbersWithFileLogger``` camera connector does not contain any camera related implementation we can still build the project because of the ```scaffolding```. Again we can do this through the IDE or from the terminal by running one of these commands:
-```
+```bash
 cmake --build --preset numberswithfilelogger-debug-build --target numberswithfilelogger
 ```
 or
-```
+```bash
 cmake --build --preset numberswithfilelogger-release-build --target numberswithfilelogger
 ```
 depending on the previously selected configuration.
@@ -402,7 +402,7 @@ cmake --build --preset numberswithfilelogger-tests-build
 ctest --preset numberswithfilelogger-tests
 ```
 
-## Installing the connector
+## Preparing Package Structure and Installation
 When building the custom camera connector with release configuration we can choose **```install```** as the target. The **```install```** target is modified so the library file will be generated in the ```src/installed_drivers/camera_connector_name/``` folder. The ```libVCA-SDK.so``` and the content of the corresponding ```lib``` folder are copied in the same output directory.
 
 Again, it can be done in the IDE by switching the configuration and building the appropriate target or from the terminal running the corresponding ```build.sh``` script or running these commands directly:
