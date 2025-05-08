@@ -101,8 +101,8 @@ The following steps elaborate on preparing a package using the Vision Connector 
     - Integrate the camera vendor's API and ensure it is compatible with the Vision Connector.
 
 4. **Build the Connector**  
-    - For local builds: Use the utility scripts in `src/requirements` to install dependencies, then follow the [Preparing Package Structure and Installation](docs/creating_and_using_a_custom_camera_connector.md#preparing-package-structure-and-installation) section to build the connector.
-    - For Docker builds: Use the Docker container to build the connector as per the instructions in the guide.
+    - **For local builds**: Use the utility scripts in `src/requirements` to install dependencies, then follow the [Preparing Package Structure and Installation](docs/creating_and_using_a_custom_camera_connector.md#preparing-package-structure-and-installation) section to build the connector.
+    - **For Docker builds**: Use the Docker container to build the connector as per the instructions in the guide.
 
 5. **Package the Connector**  
     - Package the connector following the steps in the [Packaging the Connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) section.
