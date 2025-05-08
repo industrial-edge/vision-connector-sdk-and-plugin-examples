@@ -1,19 +1,33 @@
 # Vision Connector Drivers
 
 ## Table of Contents
+
 * **[Description](#description)**
     * **[Overview](#overview)**
     * **[General Task](#general-task)**
 * **[Requirements](#requirements)**
     * **[Prerequisites](#prerequisites)**
-    * **[Used components](#used-components)**
+        * **[Development Skills](#development-skills)**
+        * **[System Requirements](#system-requirements)**
+        * **[Camera Integration Requirements](#camera-integration-requirements)**
+    * **[Used Components](#used-components)**
+        * **[Core Components](#core-components)**
+        * **[Build Environment](#build-environment)**
 * **[Installation](#installation)**
-* **[Usage](#usage)**
+* **[Step-by-Step Guide to Building a Connector](#step-by-step-guide-to-building-a-connector)**
+    * **[Prepare the Development Environment](#prepare-the-development-environment)**
+    * **[Understand the Vision Connector SDK](#understand-the-vision-connector-sdk)**
+    * **[Create the Custom Camera Connector](#create-the-custom-camera-connector)**
+    * **[Build the Connector](#build-the-connector)**
+    * **[Package the Connector](#package-the-connector)**
+    * **[Upload the Connector](#upload-the-connector)**
+    * **[Test the Connector](#test-the-connector)**
 * **[Documentation](#documentation)**
+    * **[Core Documentation](#core-documentation)**
+    * **[Additional Resources](#additional-resources)**
 * **[Contribution](#contribution)**
 * **[License and Legal Information](#license-and-legal-information)**
 * **[Disclaimer](#disclaimer)**
-
 
 ## Description
 
@@ -26,19 +40,42 @@ This project provides guidance for implementing the Vision Connector drivers fea
 
 ## Requirements
 
-### Prerequisites
-To create a custom camera connector, ensure the following prerequisites are met:
-- Experience with Siemens Vision Connector application and its features
-- Proficiency in C++ programming and CMake build system
-- Understanding of the Vision Connector SDK (v1.0.0)
-- Development environment meeting project specifications
-- Access to and understanding of camera vendor's API documentation
-- Camera vendor's C++ headers and libraries for integration
+Here's the revised prerequisites section with improved organization and clarity:
 
-### Used components
-- Debian 11
+### Prerequisites
+
+#### Development Skills
+- Proficiency in C++ programming
+- Experience with CMake build system
+- Familiarity with Siemens Vision Connector application and its features
+- Understanding of the Vision Connector SDK (v1.0.0)
+
+#### System Requirements
+Choose one of the following:
+- **For Local Build:**
+  - Debian 11 (bullseye) operating system
+  - Development environment meeting project specifications
+- **For Docker Build:**
+  - Any operating system supporting Docker
+  - Docker Engine installed and configured
+
+#### Camera Integration Requirements
+- Access to camera vendor's API documentation
+- Camera vendor's C++ headers and libraries
+- Understanding of camera vendor's API and protocols
+
+### Used Components
+#### Core Components
 - Vision Connector V1.2.0
 - Vision Connector SDK V1.0.0
+
+#### Build Environment
+- **Local Build:**
+  - Debian 11 (bullseye)
+  - Required development tools (installed via provided scripts)
+- **Docker Build:**
+  - Docker Engine
+  - Provided Docker container configuration
 
 ## Installation
 To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. The development environment requires Debian 11 (bullseye); if you're using a different operating system, it's strongly recommended to use the Docker container approach instead. For users with Debian 11, the scripts in `src/requirements` can be used to install prerequisite packages. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
@@ -53,29 +90,30 @@ The following steps elaborate on preparing a package using the Vision Connector 
 1. **Prepare the Development Environment**  
     > **Note:** Skip this step if you're using the Docker container approach for building.
     
-    If building locally, ensure all prerequisites are installed and the development environment is set up as described in the [Development Environment Setup](docs/development_environment.md) section.
+    - For local builds: Ensure all prerequisites are installed and set up the development environment as described in the [Development Environment Setup](docs/development_environment.md).
+    - For Docker builds: Use the provided Docker container configuration to set up the environment.
 
 2. **Understand the Vision Connector SDK**  
-    Familiarize yourself with the Vision Connector SDK by reviewing the [Vision Connector SDK Guide](docs/vca_sdk.md).
+    - Review the [Vision Connector SDK Guide](docs/vca_sdk.md) to understand its features and usage.
 
 3. **Create the Custom Camera Connector**  
-    - Use the provided SDK and follow the [Custom Camera Connector Guide](docs/creating_and_using_a_custom_camera_connector.md) to implement your connector.
-    - Integrate the camera vendor's API and ensure compatibility with the Vision Connector.
+    - Follow the [Custom Camera Connector Guide](docs/creating_and_using_a_custom_camera_connector.md) to implement your connector.
+    - Integrate the camera vendor's API and ensure it is compatible with the Vision Connector.
 
 4. **Build the Connector**  
-    - For local build: Use the utility scripts in `src/requirements` to install necessary dependencies.
-    - Follow the instructions in the [Preparing Package Structure and Installation](docs/creating_and_using_a_custom_camera_connector.md#preparing-package-structure-and-installation) section to build the connector.
+    - For local builds: Use the utility scripts in `src/requirements` to install dependencies, then follow the [Preparing Package Structure and Installation](docs/creating_and_using_a_custom_camera_connector.md#preparing-package-structure-and-installation) section to build the connector.
+    - For Docker builds: Use the Docker container to build the connector as per the instructions in the guide.
 
 5. **Package the Connector**  
-    - Package the connector as described in the [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) section.
+    - Package the connector following the steps in the [Packaging the Connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) section.
 
 6. **Upload the Connector**  
-    - Access the Vision Connector application and upload the packaged connector file.
-    - Follow the steps in the [Using the connector in Vision Connector](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section to complete the process.
+    - Open the Vision Connector application and upload the packaged connector file.
+    - Refer to the [Using the Connector in Vision Connector](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section for detailed steps.
 
 7. **Test the Connector**  
-    - Verify the functionality of the custom camera connector by testing it with the Vision Connector application.
-    - Debug and refine as necessary to ensure optimal performance.
+    - Test the custom camera connector with the Vision Connector application.
+    - Debug and refine the connector to ensure optimal performance.
 
 ## Documentation
 

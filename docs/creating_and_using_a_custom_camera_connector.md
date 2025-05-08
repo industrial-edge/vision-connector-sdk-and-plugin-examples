@@ -8,11 +8,15 @@
     * **[Configure and build new custom camera connector](#configure-and-build-new-custom-camera-connector)**
     * **[Implementing NumbersWithFileLoggerConnector class](#implementing-numberswithfileloggerconnector-class)**
     * **[Implementing NumbersWithFileLoggerCamera class](#implementing-numberswithfileloggercamera-class)**
-    * **[Adding an internal logger](#adding-an-internal-logger)**
+    * **[Adding an internal logger (Optional)](#adding-an-internal-logger-optional)**
 * **[Testing the connector](#testing-the-connector)**
-* **[Preparing Package Structure and Installation](#preparing-package-structure-and-installation)**
-* **[Packaging the connector](#packaging-the-connector)**
-* **[Using the connector in Vision Connector](#using-the-connector-in-vision-connector)**
+* **[Build and Preparing Package](#build-and-preparing-package)**
+    * **[Docker Build](#docker-build)**
+    * **[Local Build](#local-build)**
+        * **[Building](#building)**
+        * **[Packaging the connector](#packaging-the-connector)**
+    * **[Package Structure](#package-structure)**
+* **[Using the connector in Vision Connector](#using-the-connector-in-vision-connector)**## Table of Contents
 
 ## Overview
 In this walkthrough we will create an OpenCV based camera connector called ```NumbersWithFileLogger``` and load it into Vision Connector. The cameras of this camera connector will give us colored images with increasing numbers written on them. As the name suggests we shall also implement our own logging logic as part of the camera connector.
@@ -402,7 +406,23 @@ cmake --build --preset numberswithfilelogger-tests-build
 ctest --preset numberswithfilelogger-tests
 ```
 
-## Preparing Package Structure and Installation
+
+## Build and Preparing Package
+### Docker Build
+For users not running Debian 11 or preferring a containerized approach, the ```build_drivers_with_docker``` script provides a convenient solution. This script:
+- Creates a temporary development environment using Docker
+- Builds all available camera connectors in the drivers folder
+- Packages them ready for use in Vision Connector
+
+To use the Docker build approach:
+```bash
+./build_drivers_with_docker.sh
+```
+
+The script will handle all necessary steps and produce the same output structure as the local build.
+
+### Local Build
+#### Building
 When building the custom camera connector with release configuration we can choose **```install```** as the target. The **```install```** target is modified so the library file will be generated in the ```src/installed_drivers/camera_connector_name/``` folder. The ```libVCA-SDK.so``` and the content of the corresponding ```lib``` folder are copied in the same output directory.
 
 Again, it can be done in the IDE by switching the configuration and building the appropriate target or from the terminal running the corresponding ```build.sh``` script or running these commands directly:
@@ -413,14 +433,15 @@ cmake --build --preset numberswithfilelogger-release-build --target install
 
 This ensures that the final build has all of its dependencies.
 
-## Packaging the connector
+#### Packaging the connector
 When dealing with custom camera connectors, Vision Connector Application expects a .zip file containing all of the necessary files without the top-level directory.
 
 It can be done using any zip tool, but the provided utility scripts are also able to generate the final package file.
 
-If the development environment is available use the ```build_drivers.sh``` script; otherwise use the ```build_drivers_with_docker``` scripts as they can manage their own temporary development environment.
+For local builds, use the ```build_drivers.sh``` script to generate the final package.
 
-At the end we should have the following folder structure:
+### Package Structure
+Both Docker and local builds will produce the following folder structure:
 - `installed_drivers/`
     - `numberswithfilelogger/`
         - `info.txt`
