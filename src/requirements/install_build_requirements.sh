@@ -1,14 +1,13 @@
 #!/bin/bash
 
 apt-get update
-apt-get install -y wget
-
-cd /
-
-wget https://github.com/Kitware/CMake/releases/download/v3.21.7/cmake-3.21.7-linux-x86_64.sh
-chmod +x cmake-3.21.7-linux-x86_64.sh
-yes | ./cmake-3.21.7-linux-x86_64.sh
-
 apt-get install -y \
 	build-essential \
-    zip
+    zip \
+    wget
+
+wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
+
+apt-get update
+apt-get install -y cmake

@@ -5,7 +5,7 @@ apt-get install -y \
     pkg-config \
     unzip
 
-opencv_build_directory=/opencv_build
+opencv_build_directory=/opt/opencv_build
 mkdir $opencv_build_directory
 cp $(dirname "$(realpath "$0")")/oss/* $opencv_build_directory
 cd $opencv_build_directory
@@ -28,7 +28,7 @@ echo "Building and installing opencv 4.9.0"
 unzip -d opencv-4.9.0 opencv-4.9.0_cleared.zip
 cd opencv-4.9.0
 mkdir build && cd build
-/cmake-3.21.7-linux-x86_64/bin/cmake -DWITH_FFMPEG=ON -DBUILD_LIST=core,videoio -DVIDEOIO_PLUGIN_LIST=ffmpeg ..
+cmake -DWITH_FFMPEG=ON -DBUILD_LIST=core,videoio -DVIDEOIO_PLUGIN_LIST=ffmpeg ..
 make -j$(nproc)
 make install
 

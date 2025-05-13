@@ -12,8 +12,8 @@ apt-get install -y \
 	pkg-config \
 	unzip
 
-cd /
+cd /opt
 git clone https://github.com/microsoft/vcpkg
-/vcpkg/bootstrap-vcpkg.sh -disableMetrics
-chmod -R a+rwx /vcpkg/
-/vcpkg/vcpkg install nlohmann-json
+./vcpkg/bootstrap-vcpkg.sh -disableMetrics
+chmod -R a+rwx ./vcpkg/
+./vcpkg/vcpkg install nlohmann-json

@@ -1,60 +1,59 @@
 # Repository overview
 
-The VCA Drivers repository is available with utility scripts, templates, examples and the VCA SDK itself to ease the development of the camera connectors. The following list refers to the content of the ```src``` folder.
+The Vision Connector Drivers repository provides utility scripts, templates, examples, and the Vision Connector SDK to facilitate camera connector development. The following list describes the content of the ```src``` folder.
 
 ## requirements folder
-The requirements folder contains installation scripts both essential and optional for development.
+The requirements folder contains installation scripts, both essential and optional, for development.
 
- - ```install_build_requirements.sh```: This script installs a specific CMake version and the packages purely required for building the camera connectors.
- - ```install_test_requirements.sh```: This script sets up the environment to build and run tests for the camera connectors.
- - ```install_opencv.sh```: The repository contains a specific version of OpenCV with FFmpeg which are also used by VCA. With these 3rd-party libraries installed it is possible to create camera connectors using OpenCV.
- - ```install_clangd_language_server_16_0_2.sh```: This script installs the language server.
+ - ```install_build_requirements.sh```: Installs a specific CMake version and packages required for building camera connectors.
+ - ```install_test_requirements.sh```: Sets up the environment to build and run tests for camera connectors.
+ - ```install_opencv.sh```: Contains a specific version of OpenCV with FFmpeg, also used by Vision Connector. These 3rd-party libraries enable creation of camera connectors using OpenCV.
+ - ```install_clangd_language_server_16_0_2.sh```: Installs the language server.
 
 ## sdk folder
-The VCA Drivers repository comes with a pre-built VCA SDK. The library file, the header files and information about the current SDK version is found in the sdk folder.
+The Vision Connector Drivers repository includes a pre-built Vision Connector SDK. The library file, header files, and SDK version information are located in the sdk folder.
 
 ## drivers folder
-This folder contains camera connector examples. You may refer to the implementation of these connectors to get additional insights of the whole concept.
+This folder contains camera connector examples. You can refer to these connectors' implementation for additional insights into the overall concept.
 
 ## template folder
-To ease the setup and development of a new camera connector there are template files with the base implementation of the essential classes. There are additional files for testing and folders for the camera vendor's API files. These files and folders in the template folder are not to be edited, they are used by the ```scaffolding``` utility script when creating a new connector.
+The template folder contains base implementations of essential classes to facilitate new camera connector setup and development. It includes additional files for testing and folders for camera vendor's API files. These files and folders should not be edited directly, as they are used by the ```scaffolding``` utility script when creating a new connector.
 
 ## scaffolding script
-The scaffolding utility script is located in the root of the repository. As mentioned in the template folder section this script is meant to setup and help start the development of a new camera connector.
+The scaffolding utility script, located in the repository root, helps set up and initiate new camera connector development.
 
-```
+```bash
 ./scaffolding.sh *connector name*
 # The connector name must not contain any space or special characters.
 ```
-After running the script a new folder will be created in the drivers folder with the given name. This new folder is based on the template folder. The script will replace the filenames and file contents to reflect the new camera connector name.
+Running the script creates a new folder in the drivers folder with the given name, based on the template folder. The script replaces filenames and file contents to reflect the new camera connector name.
 
-For example running the script
-
+For example, running:
+```bash
+./scaffolding.sh MyCamImplementation
 ```
-./scaffolding.sh MyCam
-```
 
-has the following effect:
-- The ```mycam``` folder is created under ```drivers```,
-- the source filenames are starting with the ```MyCam``` prefix,
-- the camera connector related classes have the ```MyCam``` prefix,
-- empty ```lib``` and ```include``` folders are added for the vendor files,
-- the ```CMakeLists.txt``` is updated with the ```mycam``` project and library,
-- the ```build.sh``` script is added with ```MyCam``` build and install commands,
-- the root ```CMakePresets.json``` and ```CMakeLists.txt``` are updated with the new configurations for ```MyCam``` camera connector.
+Results in:
+- Creation of ```**MyCamImplementation**``` folder under ```drivers```
+- Source filenames starting with ```MyCamImplementation``` prefix
+- Camera connector related classes with ```MyCamImplementation``` prefix
+- Empty ```lib``` and ```include``` folders for vendor files
+- Updated ```CMakeLists.txt``` with ```MyCamImplementation``` project and library
+- Added ```build.sh``` script with ```MyCamImplementation``` build and install commands
+- Updated root ```CMakePresets.json``` and ```CMakeLists.txt``` with new ```MyCamImplementation``` camera connector configurations
 
-<b>Note that ```MyCam``` and ```mycam``` are intentionally used separately. The naming convention of the camera connector is currently restricted by VCA. The library file and the connector name must contain only lowercase letters. The script handles the naming.</b>
+<b>Note: ```MyCamImplementation``` and ```MyCamImplementation``` are intentionally used separately. Vision Connector restricts the camera connector naming convention - the library file and connector name must contain only lowercase letters. The script handles this naming convention automatically.</b>
 
 ## build_drivers script
-If the development environment is setup, the available camera connectors under the drivers folder can be built from source using the build_drivers script. The script will build the release version of the connectors and package them ready to use in VCA.
+With a configured development environment, available camera connectors in the drivers folder can be built from source using the build_drivers script. This script builds the release version of connectors and packages them ready for use in Vision Connector.
 
 ## build_drivers_with_docker script
-Through the ```build_drivers_with_docker``` scripts it is possible to build the available camera connectors under the drivers folder from source without setting up the development environment using Docker. The script uses the ```Dockerfile``` in the root of the repository to create a temporary development environment inside a container and executes the same ```build_drivers.sh``` script.
+The ```build_drivers_with_docker``` scripts enable building available camera connectors from source without setting up the development environment, using Docker instead. The script uses the ```Dockerfile``` in the repository root to create a temporary development environment inside a container and executes the ```build_drivers.sh``` script.
 
 ## Prerequisites for the scripts
-It is important to note that the scripts provided by the VCA Drivers repository might need elevated user rights. For example run the scaffolding script like this:
+Important: Scripts provided by the Vision Connector Drivers repository may require elevated user rights. For example, run the scaffolding script as follows:
 
-```
+```bash
 chmod 777 scaffolding.sh
-sudo ./scaffoldoing.sh MyCam
+sudo ./scaffolding.sh MyCamImplementation
 ```

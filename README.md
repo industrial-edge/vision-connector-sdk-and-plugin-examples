@@ -1,69 +1,133 @@
 # Vision Connector Drivers
 
 ## Table of Contents
+
 * **[Description](#description)**
     * **[Overview](#overview)**
     * **[General Task](#general-task)**
 * **[Requirements](#requirements)**
     * **[Prerequisites](#prerequisites)**
-    * **[Used components](#used-components)**
+        * **[Development Skills](#development-skills)**
+        * **[System Requirements](#system-requirements)**
+        * **[Camera Integration Requirements](#camera-integration-requirements)**
+    * **[Used Components](#used-components)**
+        * **[Core Components](#core-components)**
+        * **[Build Environment](#build-environment)**
 * **[Installation](#installation)**
-* **[Usage](#usage)**
+* **[Step-by-Step Guide to Building a Connector](#step-by-step-guide-to-building-a-connector)**
+    * **[Prepare the Development Environment](#prepare-the-development-environment)**
+    * **[Understand the Vision Connector SDK](#understand-the-vision-connector-sdk)**
+    * **[Create the Custom Camera Connector](#create-the-custom-camera-connector)**
+    * **[Build the Connector](#build-the-connector)**
+    * **[Package the Connector](#package-the-connector)**
+    * **[Upload the Connector](#upload-the-connector)**
+    * **[Test the Connector](#test-the-connector)**
 * **[Documentation](#documentation)**
+    * **[Core Documentation](#core-documentation)**
+    * **[Additional Resources](#additional-resources)**
 * **[Contribution](#contribution)**
 * **[License and Legal Information](#license-and-legal-information)**
 * **[Disclaimer](#disclaimer)**
-
 
 ## Description
 
 ### Overview
 
-The Industrial Edge Vision Connector App, or VCA for short combines industrial cameras with the Industrial Edge ecosystem. The Vision Connector uses an Ethernet interface to establish a connection to the cameras. The VCA publishes the data using the ZeroMQ server integrated in the Vision Connector with high throughput to other applications.
-
-As of version 1.2.0 it is possible to integrate any camera vendor's C++ API with simple implementation steps through custom camera connectors for VCA. 
+The Industrial Edge Vision Connector combines industrial cameras with the Industrial Edge ecosystem through an Ethernet interface. It publishes camera data using an integrated ZeroMQ server, enabling high-throughput communication with other applications. Starting with version 1.2.0, the Vision Connector provides feature for importing customer camera connectors into the application for connecting and acquiring images from additional Camera vendors (using camera vendors C++ API) or remote endpoints (such as FTP or cloud storage) which are not supported natively by the Vision Connector. This documentation provides guidance, instructions, and exmaple for creating such custom camera connectors. 
 
 ### General Task
-This project was created to introduce you to the Vision Connector drivers feature and to help the creation of custom camera connectors.
+This project provides guidance for implementing the Vision Connector drivers feature and assists in the creation of custom camera connectors. 
 
 ## Requirements
 
-### Prerequisites
-To develop a custom camera connector, the developer should meet the following requirements:
-- Familiarity with the Vision Connector application and its features.
-- Understanding of the VCA SDK, including structure and usage.
-- Working knowledge of C++ and build tools such as CMake
-- A properly set up development environment aligned with the project requirements.
-- Access to the camera vendor's API documentation.
-- Availability of the camera vendor's C++ headers and libraries required for teh integration.
+Here's the revised prerequisites section with improved organization and clarity:
 
-### Used components
+### Prerequisites
+
+#### Development Skills
+- Proficiency in C++ programming
+- Experience with CMake build system
+- Familiarity with Siemens Vision Connector application and its features
+- Understanding of the Vision Connector SDK (v1.0.0)
+
+#### System Requirements
+Choose one of the following:
+- **For Local Build:**
+  - Debian 11 (bullseye) operating system
+  - Development environment meeting project specifications
+- **For Docker Build:**
+  - Any operating system supporting Docker
+  - Docker Engine installed and configured
+
+#### Camera Integration Requirements
+- Access to camera vendor's API documentation
+- Camera vendor's C++ headers and libraries
+- Understanding of camera vendor's API and protocols
+
+### Used Components
+#### Core Components
 - Vision Connector V1.2.0
-- VCA SDK V1.0.0
+- Vision Connector SDK V1.0.0
+
+#### Build Environment
+- **Local Build:**
+  - Debian 11 (bullseye)
+  - Required development tools (installed via provided scripts)
+- **Docker Build:**
+  - Docker Engine
+  - Provided Docker container configuration
 
 ## Installation
-To build and prepeare your camera connector to use in VCA we are providing utility scripts. For more information please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
+To build and prepare your camera connector for use in Vision Connector, we provide utility scripts. The development environment requires Debian 11 (bullseye); if you're using a different operating system, it's strongly recommended to use the Docker container approach instead. For users with Debian 11, the scripts in `src/requirements` can be used to install prerequisite packages. For detailed information, please refer to the [Installing the connector](docs/creating_and_using_a_custom_camera_connector.md#installing-the-connector) and [Packaging the connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) sections.
 
-## Usage
-To use a custom camera connector in VCA first you will need to prepare the corresponding package file. When the package file is prepared you can upload it in VCA thus adding your camera connector to the application in a few sinmple steps.
+Here's the revised section with a note about skipping step 1 when using Docker:
 
-For the usage step-by-step guide please refer to the [Using the connector in VCA](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section.
+## Step-by-Step guide to building a connector
+To use a custom camera connector in Vision Connector, you first need to prepare the corresponding package file. Once prepared, you can upload it to Vision Connector.
+
+The following steps elaborate on preparing a package using the Vision Connector SDK and OpenCV as an example. However, users can adapt the process to suit their specific camera SDK or desired remote endpoint requirements.
+
+1. **Prepare the Development Environment**  
+    > **Note:** Skip this step if you're using the Docker container approach for building.
+    
+    - For local builds: Ensure all prerequisites are installed and set up the development environment as described in the [Development Environment Setup](docs/development_environment.md).
+    - For Docker builds: Use the provided Docker container configuration to set up the environment.
+
+2. **Understand the Vision Connector SDK**  
+    - Review the [Vision Connector SDK Guide](docs/vca_sdk.md) to understand its features and usage.
+
+3. **Create the Custom Camera Connector**  
+    - Follow the [Custom Camera Connector Guide](docs/creating_and_using_a_custom_camera_connector.md) to implement your connector.
+    - Integrate the camera vendor's API and ensure it is compatible with the Vision Connector.
+
+4. **Build the Connector**  
+    - **For local builds**: Use the utility scripts in `src/requirements` to install dependencies, then follow the [Preparing Package Structure and Installation](docs/creating_and_using_a_custom_camera_connector.md#preparing-package-structure-and-installation) section to build the connector.
+    - **For Docker builds**: Use the Docker container to build the connector as per the instructions in the guide.
+
+5. **Package the Connector**  
+    - Package the connector following the steps in the [Packaging the Connector](docs/creating_and_using_a_custom_camera_connector.md#packaging-the-connector) section.
+
+6. **Upload the Connector**  
+    - Open the Vision Connector application and upload the packaged connector file.
+    - Refer to the [Using the Connector in Vision Connector](docs/creating_and_using_a_custom_camera_connector.md#using-the-connector-in-vca) section for detailed steps.
+
+7. **Test the Connector**  
+    - Test the custom camera connector with the Vision Connector application.
+    - Debug and refine the connector to ensure optimal performance.
 
 ## Documentation
 
-To get familiar with the Vision Connector Drivers project please read the provided documentation
+### Core Documentation
+* [Repository Overview](docs/repository_overview.md)
+* [Development Environment Setup](docs/development_environment.md)
+* [Vision Connector SDK Guide](docs/vca_sdk.md)
+* [Custom Camera Connector Guide](docs/creating_and_using_a_custom_camera_connector.md)
 
-* [Repository overview](docs/repository_overview.md)
-* [How to setup the development environment](docs/development_environment.md)
-* [Introduction to VCA SDK](docs/vca_sdk.md)
-* [Creating and using a custom camera connector](docs/creating_and_using_a_custom_camera_connector.md)
-
-You can find further documentation and help in the following links
-
+### Additional Resources
 * [Industrial Edge Hub](https://iehub.eu1.edge.siemens.cloud/#/documentation)
 * [Industrial Edge Forum](https://www.siemens.com/industrial-edge-forum)
-* [Industrial Edge landing page](https://new.siemens.com/global/en/products/automation/topic-areas/industrial-edge/simatic-edge.html)
-* [Industrial Edge GitHub page](https://github.com/industrial-edge)
+* [Industrial Edge Landing Page](https://new.siemens.com/global/en/products/automation/topic-areas/industrial-edge/simatic-edge.html)
+* [Industrial Edge GitHub](https://github.com/industrial-edge)
 * [Industrial Edge Learning Path](https://siemens-learning-simaticedge.sabacloud.com)
 
 ## Contribution
